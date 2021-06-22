@@ -51,17 +51,19 @@ public class ArrayStorage {
         return storage.length;
     }
 
-    private void toSwap(int first, int second){ //метод меняет местами пару чисел массива
-        Resume temp = storage[first];      //во временную переменную помещаем первый элемент
-        storage[first] = storage[second];       //на место первого ставим второй элемент
-        storage[second] = temp;          //вместо второго элемента пишем первый из временной памяти
-    }
+    public void bubbleSorter() {
+        boolean sorted = false;
 
-    public void bubbleSorter(){     //МЕТОД ПУЗЫРЬКОВОЙ СОРТИРОВКИ
-        for (int i1 = size(); i1 >= 0; i1--){  //Внешний цикл
-            for (int i2 = 0; i2 < i1; i2++){       //Внутренний цикл
-                if(storage[i2] == null && storage[i1] != null)          //Если порядок элементов нарушен
-                    toSwap(i2, i2 + 1);             //вызвать метод, меняющий местами
+        while (!sorted) {
+            sorted = true;
+
+            for (int i = 0; i < size(); i++) {
+                if (storage[i].uuid == null && storage[i + 1] != null) {
+                    sorted = false;
+                    Resume temp = storage[i];
+                    storage[i] = storage[i + 1];
+                    storage[i + 1] = temp;
+                }
             }
         }
     }
