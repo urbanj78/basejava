@@ -15,7 +15,7 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        storage[size()] = r;
+        storage[size] = r;
         size++;
     }
 
@@ -41,7 +41,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return Arrays.copyOf(storage, size());
+        return Arrays.copyOf(storage, size);
     }
 
     int size() {
@@ -49,7 +49,7 @@ public class ArrayStorage {
     }
 
     public void shiftStorage(int position) {
-                System.arraycopy(storage, position + 1, storage, position, size - position);
-                size--;
+        System.arraycopy(storage, position + 1, storage, position, size - position);
+        size--;
     }
 }
