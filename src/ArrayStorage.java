@@ -8,7 +8,7 @@ public class ArrayStorage {
     private int size;
 
     void clear() {
-        for (int i = size(); i >= 0; --i) {
+        for (int i = size - 1; i >= 0; --i) {
             storage[i] = null;
         }
         size = 0;
@@ -20,24 +20,21 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        for (Resume resume : storage) {
-            if (resume != null && resume.uuid.equals(uuid)) {
-                return resume;
+        for (int i = size - 1; i >= 0; i--) {
+            if (storage[i].uuid.equals(uuid)) {
+                return storage[i];
             }
         }
         return null;
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < size(); i++) {
-            if (storage[i] != null) {
-                if (storage[i].uuid.equals(uuid)) {
-                    storage[i] = null;
-                }
+        for (int i = 0; i < size; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                storage[i] = null;
             }
         }
-        bubbleSorter();
-        size--;
+        shiftStorage();
     }
 
     /**
@@ -51,19 +48,11 @@ public class ArrayStorage {
         return size;
     }
 
-    public void bubbleSorter() {
-        boolean sorted = false;
-
-        while (!sorted) {
-            sorted = true;
-
-            for (int i = 0; i < size(); i++) {
-                if (storage[i] == null && storage[i + 1] != null) {
-                    sorted = false;
-                    Resume temp = storage[i];
-                    storage[i] = storage[i + 1];
-                    storage[i + 1] = temp;
-                }
+    public void shiftStorage() {
+        for (int i = 0; i < size; i++) {
+            if (storage[i] == null) {
+                System.arraycopy(storage, i + 1, storage, i, size - i);
+                size--;
             }
         }
     }
