@@ -8,7 +8,7 @@ public class ArrayStorage {
     private int size;
 
     void clear() {
-        for (int i = size - 1; i >= 0; --i) {
+        for (int i = 0; i < size; i++) {
             storage[i] = null;
         }
         size = 0;
@@ -20,7 +20,7 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        for (int i = size - 1; i >= 0; i--) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 return storage[i];
             }
@@ -32,9 +32,9 @@ public class ArrayStorage {
         for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 storage[i] = null;
+                shiftStorage(i);
             }
         }
-        shiftStorage();
     }
 
     /**
@@ -48,12 +48,8 @@ public class ArrayStorage {
         return size;
     }
 
-    public void shiftStorage() {
-        for (int i = 0; i < size; i++) {
-            if (storage[i] == null) {
-                System.arraycopy(storage, i + 1, storage, i, size - i);
+    public void shiftStorage(int position) {
+                System.arraycopy(storage, position + 1, storage, position, size - position);
                 size--;
-            }
-        }
     }
 }
