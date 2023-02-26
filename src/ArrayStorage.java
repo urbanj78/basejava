@@ -4,37 +4,40 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private int usedSize = 0;
-    Resume[] storage = new Resume[10000];
+    private int size = 0;
+    final Resume[] STORAGE_LIMIT = new Resume[10000];
 
     void clear() {
-        for (int i = 0; i <= usedSize; i++) {
-            storage[i] = null;
-        }
-        usedSize = 0;
+        Arrays.fill(STORAGE_LIMIT, 0, size - 1, null);
+        size = 0;
     }
 
     void save(Resume r) {
-        storage[usedSize] = r;
-        usedSize++;
+        for (int i = 0; i < size; i++) {
+            if (STORAGE_LIMIT[i].uuid.equals(r.uuid)) {
+                System.out.println(r.uuid + " уже существует!");
+                return;
+            }
+        }
+        STORAGE_LIMIT[size] = r;
+        size++;
     }
 
     Resume get(String uuid) {
-        for (int i = 0; i < usedSize; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                return storage[i];
+        for (int i = 0; i < size; i++) {
+            if (STORAGE_LIMIT[i].uuid.equals(uuid)) {
+                return STORAGE_LIMIT[i];
             }
         }
         return null;
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < usedSize; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                storage[i] = null;
-                System.arraycopy(storage, i + 1, storage, i, usedSize - (i + 1));
-                storage[usedSize] = null;
-                usedSize--;
+        for (int i = 0; i < size; i++) {
+            if (STORAGE_LIMIT[i].uuid.equals(uuid)) {
+                STORAGE_LIMIT[i] = STORAGE_LIMIT[size - 1];
+                STORAGE_LIMIT[size - 1] = null;
+                size--;
             }
         }
     }
@@ -43,10 +46,10 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return Arrays.copyOf(storage, usedSize);
+        return Arrays.copyOf(STORAGE_LIMIT, size);
     }
 
     int size() {
-        return usedSize;
+        return size;
     }
 }
