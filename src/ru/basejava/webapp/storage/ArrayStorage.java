@@ -9,7 +9,7 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
     private int size = 0;
-    final int STORAGE_LIMIT = 10000;
+    protected int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
 
     public void clear() {
@@ -30,7 +30,9 @@ public class ArrayStorage {
     }
 
     public void update(Resume r) {
-        if (getIndex(r.getUuid()) >= 0) {
+        int index = getIndex(r.getUuid());
+        if (index >= 0) {
+            storage[index] = r;
             System.out.println("Резюме " + r.getUuid() + " обновлено!");
         } else {
             System.out.println("ERROR  Резюме " + r.getUuid() + " нет в хранилище!");
