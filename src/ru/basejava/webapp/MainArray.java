@@ -1,7 +1,7 @@
 package ru.basejava.webapp;
 
 import ru.basejava.webapp.model.Resume;
-import ru.basejava.webapp.storage.ArrayStorage;
+import ru.basejava.webapp.storage.SortedArrayStorage;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
  * (just run, no need to understand)
  */
 public class MainArray {
-    private final static ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    private final static SortedArrayStorage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -29,34 +29,27 @@ public class MainArray {
                 uuid = params[1].intern();
             }
             switch (params[0]) {
-                case "list":
-                    printAll();
-                    break;
-                case "size":
-                    System.out.println(ARRAY_STORAGE.size());
-                    break;
-                case "save":
+                case "list" -> printAll();
+                case "size" -> System.out.println(ARRAY_STORAGE.size());
+                case "save" -> {
                     r = new Resume();
                     r.setUuid(uuid);
                     ARRAY_STORAGE.save(r);
                     printAll();
-                    break;
-                case "delete":
+                }
+                case "delete" -> {
                     ARRAY_STORAGE.delete(uuid);
                     printAll();
-                    break;
-                case "get":
-                    System.out.println(ARRAY_STORAGE.get(uuid));
-                    break;
-                case "clear":
+                }
+                case "get" -> System.out.println(ARRAY_STORAGE.get(uuid));
+                case "clear" -> {
                     ARRAY_STORAGE.clear();
                     printAll();
-                    break;
-                case "exit":
+                }
+                case "exit" -> {
                     return;
-                default:
-                    System.out.println("Неверная команда.");
-                    break;
+                }
+                default -> System.out.println("Неверная команда.");
             }
         }
     }
