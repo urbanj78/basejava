@@ -13,19 +13,27 @@ public class SortedArrayStorage extends AbstractArrayStorage {
             System.out.println("ERROR  Резюме " + r.getUuid() + " нельзя добавить, хранилище переполнено!");
         } else if (getIndex(r.getUuid()) >= 0) {
             System.out.println("ERROR  Резюме " + r.getUuid() + " уже есть в хранилище!");
-        } else if (size > 0) {
-            int index = -(Arrays.binarySearch(storage, 0, size - 1, r));
+        } else if (size == 0) {
+            storage[size] = r;
+            size++;
+        } else if (size == 1) {
             if (r.compareTo(storage[size - 1]) > 0) {
                 storage[size] = r;
             } else {
-                System.arraycopy(storage, index, storage, index + 1, size - index);
-                storage[index] = r;
+                storage[size] = storage[size - 1];
+                storage[size - 1] = r;
             }
             size++;
         } else {
-            storage[size] = r;
+            int index = -(Arrays.binarySearch(storage, 0, size - 1, r));
+            if (index == 1) {
+                index = 0;
+            }
+            System.arraycopy(storage, index, storage, index + 1, size - index);
+            storage[index] = r;
             size++;
         }
+
     }
 
 
