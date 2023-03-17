@@ -7,7 +7,7 @@ import ru.basejava.webapp.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
 
-
+    @Override
     public void save(Resume r) {
         if (size == STORAGE_LIMIT) {
             System.out.println("ERROR  Резюме " + r.getUuid() + " нельзя добавить, хранилище переполнено!");
@@ -20,6 +20,7 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
 
+    @Override
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
@@ -30,7 +31,7 @@ public class ArrayStorage extends AbstractArrayStorage {
             System.out.println("ERROR  Резюме " + uuid + " нет в хранилище!");
         }
     }
-
+    @Override
     protected int getIndex(String uuid) {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].getUuid())) {
