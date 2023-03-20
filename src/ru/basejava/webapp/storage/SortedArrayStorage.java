@@ -6,14 +6,9 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
-
     @Override
-    public void save(Resume r) {
-        if (size == STORAGE_LIMIT) {
-            System.out.println("ERROR  Резюме " + r.getUuid() + " нельзя добавить, хранилище переполнено!");
-        } else if (getIndex(r.getUuid()) >= 0) {
-            System.out.println("ERROR  Резюме " + r.getUuid() + " уже есть в хранилище!");
-        } else if (size == 0) {
+    public void doSave(Resume r) {
+        if (size == 0) {
             storage[size] = r;
             size++;
         } else if (size == 1) {
@@ -36,19 +31,12 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     }
 
-
     @Override
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
+    public void doDelete(int index) {
             System.arraycopy(storage, index + 1, storage, index, size - index - 1);
             storage[size - 1] = null;
             size--;
-        } else {
-            System.out.println("ERROR  Резюме " + uuid + " нет в хранилище!");
-        }
     }
-
 
     @Override
     protected int getIndex(String uuid) {
