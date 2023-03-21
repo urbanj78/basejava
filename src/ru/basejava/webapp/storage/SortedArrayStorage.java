@@ -8,7 +8,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public void doSave(Resume r, int index) {
-        int insertionIndex = -index -1;
+        int insertionIndex = -index - 1;
         if (insertionIndex == size) {
             storage[size] = r;
         } else {
@@ -19,7 +19,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public void doDelete(int index) {
-            System.arraycopy(storage, index + 1, storage, index, size - index - 1);
+        System.arraycopy(storage, index + 1, storage, index, size - index - 1);
     }
 
     @Override

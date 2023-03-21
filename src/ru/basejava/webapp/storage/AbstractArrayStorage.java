@@ -13,7 +13,7 @@ public abstract class AbstractArrayStorage implements Storage {
         int index = getIndex(r.getUuid());
         if (size == STORAGE_LIMIT) {
             System.out.println("ERROR  Резюме " + r.getUuid() + " нельзя добавить, хранилище переполнено!");
-        } else if(index >= 0){
+        } else if (index >= 0) {
             System.out.println("ERROR  Резюме " + r.getUuid() + " уже есть в хранилище!");
         } else {
             doSave(r, index);
