@@ -1,5 +1,7 @@
 package ru.basejava.webapp.storage;
 
+import ru.basejava.webapp.exception.ExistStorageException;
+import ru.basejava.webapp.exception.NotExistStorageException;
 import ru.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -14,7 +16,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (size == STORAGE_LIMIT) {
             System.out.println("ERROR  Резюме " + r.getUuid() + " нельзя добавить, хранилище переполнено!");
         } else if (index >= 0) {
-            System.out.println("ERROR  Резюме " + r.getUuid() + " уже есть в хранилище!");
+            throw new ExistStorageException(r.getUuid());
         } else {
             doSave(r, index);
             size++;
@@ -28,7 +30,7 @@ public abstract class AbstractArrayStorage implements Storage {
             storage[size - 1] = null;
             size--;
         } else {
-            System.out.println("ERROR  Резюме " + uuid + " нет в хранилище!");
+            throw new NotExistStorageException(uuid);
         }
     }
 
@@ -46,8 +48,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index >= 0) {
             return storage[index];
         } else {
-            System.out.println("ERROR  Резюме " + uuid + " нет в хранилище!");
-            return null;
+            throw new NotExistStorageException(uuid);
         }
     }
 
@@ -57,7 +58,7 @@ public abstract class AbstractArrayStorage implements Storage {
             storage[index] = r;
             System.out.println("Резюме " + r.getUuid() + " обновлено!");
         } else {
-            System.out.println("ERROR  Резюме " + r.getUuid() + " нет в хранилище!");
+            throw new NotExistStorageException(r.getUuid());
         }
     }
 
