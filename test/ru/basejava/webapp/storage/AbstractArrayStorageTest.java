@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.basejava.webapp.exception.ExistStorageException;
 import ru.basejava.webapp.exception.NotExistStorageException;
+import ru.basejava.webapp.exception.StorageException;
 import ru.basejava.webapp.model.Resume;
 
 class AbstractArrayStorageTest {
@@ -83,9 +84,42 @@ class AbstractArrayStorageTest {
 
     @Test
     void update() {
+        Resume r = new Resume(UUID_1);
+        storage.update(r);
+        Assertions.assertEquals(r, storage.get("uuid1"));
+    }
+
+    @Test
+    void updateNotExist() {
+        Resume r = new Resume("dummy");
+        Assertions.assertThrows(NotExistStorageException.class, () -> {
+            storage.update(r);
+        });
     }
 
     @Test
     void getAll() {
+        Resume[] getAllResult = storage.getAll();
+        Resume[] arrayToCompare = new Resume[3];
+        final String UUID_1 = "uuid1";
+        final String UUID_2 = "uuid2";
+        final String UUID_3 = "uuid3";
+        arrayToCompare[0] = new Resume(UUID_1);
+        arrayToCompare[1] = new Resume(UUID_2);
+        arrayToCompare[2] = new Resume(UUID_3);
+
+        Assertions.assertArrayEquals(getAllResult, arrayToCompare);
+    }
+
+    @Test
+    void storageOverflow() {
+            for (int i = storage.size(); i < 10000; i++) {
+                Assertions.assertNotEquals(10000, i, "ERROR  Хранилище переполнено раньше времени!");
+                storage.save(new Resume());
+        }
+        Assertions.assertThrows(StorageException.class, () -> {
+            storage.save(new Resume());
+        });
+
     }
 }

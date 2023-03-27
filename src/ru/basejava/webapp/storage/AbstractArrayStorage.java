@@ -2,6 +2,7 @@ package ru.basejava.webapp.storage;
 
 import ru.basejava.webapp.exception.ExistStorageException;
 import ru.basejava.webapp.exception.NotExistStorageException;
+import ru.basejava.webapp.exception.StorageException;
 import ru.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -14,7 +15,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public void save(Resume r) {
         int index = getIndex(r.getUuid());
         if (size == STORAGE_LIMIT) {
-            System.out.println("ERROR  Резюме " + r.getUuid() + " нельзя добавить, хранилище переполнено!");
+            throw new StorageException("ERROR  Резюме " + r.getUuid() + " нельзя добавить, хранилище переполнено!", r.getUuid());
         } else if (index >= 0) {
             throw new ExistStorageException(r.getUuid());
         } else {
