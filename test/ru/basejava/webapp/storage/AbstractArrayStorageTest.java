@@ -10,7 +10,7 @@ import ru.basejava.webapp.model.Resume;
 
 class AbstractArrayStorageTest {
 
-    private Storage storage;
+    private final Storage storage;
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
@@ -28,7 +28,6 @@ class AbstractArrayStorageTest {
         storage.save(new Resume(UUID_3));
     }
 
-
     @Test
     void save() {
         Resume r = new Resume("uuid4");
@@ -40,9 +39,7 @@ class AbstractArrayStorageTest {
     @Test
     void saveExistStorage() {
         Resume r = new Resume("uuid1");
-        Assertions.assertThrows(ExistStorageException.class, () -> {
-            storage.save(r);
-        });
+        Assertions.assertThrows(ExistStorageException.class, () -> storage.save(r));
     }
 
     @Test
@@ -53,9 +50,7 @@ class AbstractArrayStorageTest {
 
     @Test
     void deleteNotExist() {
-        Assertions.assertThrows(NotExistStorageException.class, () -> {
-            storage.delete("dummy");
-        });
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.delete("dummy"));
     }
 
     @Test
@@ -77,9 +72,7 @@ class AbstractArrayStorageTest {
 
     @Test
     void getNotExist() {
-        Assertions.assertThrows(NotExistStorageException.class, () -> {
-            storage.get("dummy");
-        });
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.get("dummy"));
     }
 
     @Test
@@ -92,9 +85,7 @@ class AbstractArrayStorageTest {
     @Test
     void updateNotExist() {
         Resume r = new Resume("dummy");
-        Assertions.assertThrows(NotExistStorageException.class, () -> {
-            storage.update(r);
-        });
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.update(r));
     }
 
     @Test
@@ -113,13 +104,10 @@ class AbstractArrayStorageTest {
 
     @Test
     void storageOverflow() {
-            for (int i = storage.size(); i < 10000; i++) {
-                Assertions.assertNotEquals(10000, i, "ERROR  Хранилище переполнено раньше времени!");
-                storage.save(new Resume());
-        }
-        Assertions.assertThrows(StorageException.class, () -> {
+        for (int i = storage.size(); i < 10000; i++) {
+            Assertions.assertNotEquals(10000, i, "ERROR  Хранилище переполнено раньше времени!");
             storage.save(new Resume());
-        });
-
+        }
+        Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume()));
     }
 }
