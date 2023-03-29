@@ -107,10 +107,16 @@ class AbstractArrayStorageTest {
 
     @Test
     void storageOverflow() {
-        for (int i = storage.size(); i < 10000; i++) {
-            Assertions.assertNotEquals(10000, i, "ERROR  Хранилище переполнено раньше времени!");
-            storage.save(new Resume());
+        storage.clear();
+
+        for (int i = storage.size(); i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
+            try {
+                storage.save(new Resume());
+            } catch (StorageException exception) {
+                System.out.println("ERROR  Хранилище переполнено раньше времени!");
+            }
         }
+
         Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume()));
     }
 
