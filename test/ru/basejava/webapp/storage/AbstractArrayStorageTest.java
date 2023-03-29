@@ -101,9 +101,8 @@ class AbstractArrayStorageTest {
         final String UUID_3 = "uuid3";
 
         Resume[] actual = new Resume[]{new Resume(UUID_1), new Resume(UUID_2), new Resume(UUID_3)};
-        Resume[] getAllResult = storage.getAll();
 
-        Assertions.assertArrayEquals(getAllResult, actual);
+        Assertions.assertArrayEquals(storage.getAll(), actual);
     }
 
     @Test
