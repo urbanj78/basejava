@@ -18,6 +18,20 @@ class AbstractArrayStorageTest {
     private static final String UUID_4 = "uuid4";
     private static final String UUID_NOT_EXIST = "dummy";
 
+    private static final Resume RESUME_1;
+    private static final Resume RESUME_2;
+    private static final Resume RESUME_3;
+    private static final Resume RESUME_4;
+    private static final Resume RESUME_NOT_EXIST;
+
+    static {
+        RESUME_1 = new Resume(UUID_1);
+        RESUME_2 = new Resume(UUID_2);
+        RESUME_3 = new Resume(UUID_3);
+        RESUME_4 = new Resume(UUID_4);
+        RESUME_NOT_EXIST = new Resume(UUID_NOT_EXIST);
+    }
+
     AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
     }
@@ -25,14 +39,14 @@ class AbstractArrayStorageTest {
     @BeforeEach
     public void setUp() {
         //storage.clear();
-        storage.save(new Resume(UUID_1));
-        storage.save(new Resume(UUID_2));
-        storage.save(new Resume(UUID_3));
+        storage.save(RESUME_1);
+        storage.save(RESUME_2);
+        storage.save(RESUME_3);
     }
 
     @Test
     void save() {
-        storage.save(new Resume(UUID_4));
+        storage.save(RESUME_4);
         assertGet(storage.get(UUID_4));
         assertSize(4);
     }
@@ -40,7 +54,7 @@ class AbstractArrayStorageTest {
     @Test
     void saveExistStorage() {
         assertSize(3);
-        Assertions.assertThrows(ExistStorageException.class, () -> storage.save(new Resume(UUID_1)));
+        Assertions.assertThrows(ExistStorageException.class, () -> storage.save(RESUME_1));
     }
 
     @Test
@@ -83,14 +97,14 @@ class AbstractArrayStorageTest {
 
     @Test
     void update() {
-        Resume r = new Resume(UUID_1);
+        Resume r = RESUME_1;
         storage.update(r);
         Assertions.assertEquals(r, storage.get(UUID_1));
     }
 
     @Test
     void updateNotExist() {
-        Assertions.assertThrows(NotExistStorageException.class, () -> storage.update(new Resume(UUID_NOT_EXIST)));
+        Assertions.assertThrows(NotExistStorageException.class, () -> storage.update(RESUME_NOT_EXIST));
     }
 
     @Test
@@ -113,7 +127,7 @@ class AbstractArrayStorageTest {
             try {
                 storage.save(new Resume());
             } catch (StorageException exception) {
-                System.out.println("ERROR  Хранилище переполнено раньше времени!");
+                Assertions.fail("ERROR  Хранилище переполнено раньше времени!");
             }
         }
 
