@@ -2,7 +2,11 @@ package ru.basejava.webapp.storage;
 
 import ru.basejava.webapp.model.Resume;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class ListStorage extends AbstractStorage {
+    protected List<Resume> storage = new LinkedList<>();
 
     @Override
     public void clear() {
