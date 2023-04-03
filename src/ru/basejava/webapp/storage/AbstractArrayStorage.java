@@ -69,5 +69,5 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     public abstract void doDelete(int index);
 
-    protected abstract int getIndex(String uuid);
+
 }
