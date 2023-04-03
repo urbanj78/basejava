@@ -1,13 +1,14 @@
 package ru.basejava.webapp.storage;
 
 import ru.basejava.webapp.exception.ExistStorageException;
+import ru.basejava.webapp.exception.NotExistStorageException;
 import ru.basejava.webapp.model.Resume;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
-    protected Map<String, Resume> storage = new Hashtable<>();
+    protected Map<String, Resume> storage = new HashMap<>();
 
     @Override
     public void clear() {
@@ -16,36 +17,41 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     public void update(Resume r) {
-
+        String uuid = r.getUuid();
+        if(storage.replace(uuid, r) == null) {
+            throw new NotExistStorageException(uuid);
+        }
     }
 
     @Override
     public void save(Resume r) {
-        String key = r.getUuid();
-        if (storage.get(key) == null) {
-            storage.put(key, r);
+        String uuid = r.getUuid();
+        if (!storage.containsKey(uuid)) {
+            storage.put(uuid, r);
         } else {
-            throw new ExistStorageException(key);
+            throw new ExistStorageException(uuid);
         }
     }
 
     @Override
     public Resume get(String uuid) {
-        return null;
+        return storage.get(uuid);
     }
 
     @Override
     public void delete(String uuid) {
-
+        if (storage.remove(uuid) == null) {
+            throw new NotExistStorageException(uuid);
+        }
     }
 
     @Override
     public Resume[] getAll() {
-        return storage.entrySet().toArray(new Resume[0]);
+        return storage.values().toArray(new Resume[0]);
     }
 
     @Override
     public int size() {
-        return 0;
+        return storage.size();
     }
 }
