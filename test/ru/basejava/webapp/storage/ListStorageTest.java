@@ -5,12 +5,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.basejava.webapp.exception.ExistStorageException;
 import ru.basejava.webapp.exception.NotExistStorageException;
-import ru.basejava.webapp.exception.StorageException;
 import ru.basejava.webapp.model.Resume;
 
-class AbstractArrayStorageTest {
-
-    private final Storage storage;
+public class ListStorageTest {
+    private final Storage storage = new ListStorage();
 
     private static final String UUID_1 = "uuid1";
     private static final String UUID_2 = "uuid2";
@@ -32,13 +30,9 @@ class AbstractArrayStorageTest {
         RESUME_NOT_EXIST = new Resume(UUID_NOT_EXIST);
     }
 
-    AbstractArrayStorageTest(Storage storage) {
-        this.storage = storage;
-    }
-
     @BeforeEach
     public void setUp() {
-        //storage.clear();
+        storage.clear();
         storage.save(RESUME_1);
         storage.save(RESUME_2);
         storage.save(RESUME_3);
@@ -103,11 +97,6 @@ class AbstractArrayStorageTest {
     }
 
     @Test
-    void size() {
-        assertSize(3);
-    }
-
-    @Test
     void getAll() {
 
         final String UUID_1 = "uuid1";
@@ -120,18 +109,8 @@ class AbstractArrayStorageTest {
     }
 
     @Test
-    void storageOverflow() {
-        storage.clear();
-
-        for (int i = storage.size(); i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
-            try {
-                storage.save(new Resume());
-            } catch (StorageException exception) {
-                Assertions.fail("ERROR  Хранилище переполнено раньше времени!");
-            }
-        }
-
-        Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume()));
+    void size() {
+        assertSize(3);
     }
 
     private void assertSize(int size) {
@@ -142,3 +121,4 @@ class AbstractArrayStorageTest {
         Assertions.assertEquals(resume, storage.get(resume.getUuid()));
     }
 }
+

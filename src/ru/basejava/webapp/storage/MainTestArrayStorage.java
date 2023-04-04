@@ -6,7 +6,7 @@ import ru.basejava.webapp.model.Resume;
  * Test for your ru.basejava.webapp.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    static final ListStorage ARRAY_STORAGE = new ListStorage();
+    static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume("uuid1");
