@@ -50,9 +50,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    //@Override
-    //protected abstract Integer getSearchKey(String uuid);
-
     protected abstract boolean isExist(Object index);
 
     protected abstract void finSave(Resume r, Object index);
