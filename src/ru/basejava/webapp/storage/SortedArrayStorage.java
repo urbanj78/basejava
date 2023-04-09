@@ -7,8 +7,8 @@ import java.util.Arrays;
 public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void finSave(Resume r, Integer index) {
-        int insertionIndex = -index - 1;
+    public void finSave(Resume r, Object index) {
+        int insertionIndex = -(int) index - 1;
         if (insertionIndex == size) {
             storage[size] = r;
         } else {
@@ -18,17 +18,17 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    public void finDelete(Integer index) {
-        System.arraycopy(storage, index + 1, storage, index, size - index - 1);
+    public void finDelete(Object index) {
+        System.arraycopy(storage, (int) index + 1, storage, (int) index, size - (int) index - 1);
     }
 
     @Override
-    protected boolean isExist(Integer index) {
-        return index >= 0;
+    protected boolean isExist(Object index) {
+        return (int) index >= 0;
     }
 
     @Override
-    protected Integer getSearchKey(String uuid) {
+    protected Object getSearchKey(String uuid) {
         Resume searchKey = new Resume(uuid);
         return Arrays.binarySearch(storage, 0, size, searchKey);
     }
