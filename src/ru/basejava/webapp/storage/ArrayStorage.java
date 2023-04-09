@@ -8,17 +8,22 @@ import ru.basejava.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void doSave(Resume r, int index) {
+    public void finSave(Resume r, Integer index) {
         storage[size] = r;
     }
 
     @Override
-    public void doDelete(int index) {
+    protected boolean isExist(Integer index) {
+        return index >= 0;
+    }
+
+    @Override
+    public void finDelete(Integer index) {
         storage[index] = storage[size - 1];
     }
 
     @Override
-    protected int getIndex(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].getUuid())) {
                 return i;

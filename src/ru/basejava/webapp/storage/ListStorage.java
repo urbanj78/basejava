@@ -3,9 +3,8 @@ package ru.basejava.webapp.storage;
 import ru.basejava.webapp.model.Resume;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
     protected ArrayList<Resume> storage = new ArrayList<>();
 
     @Override
@@ -14,38 +13,23 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public boolean doUpdate(Resume r) {
-        if (storage.contains(r)) {
-            storage.set(storage.indexOf(r), r);
-            return true;
-        }
-        return false;
+    protected void doUpdate(Resume r, Integer index) {
+        storage.set(index, r);
     }
 
     @Override
-    public boolean doSave(Resume r) {
-        if (!storage.contains(r)) {
-            storage.add(r);
-            return true;
-        }
-        return false;
+    public void doSave(Resume r, Integer index) {
+        storage.add(r);
     }
 
     @Override
-    public Resume doGet(String uuid) {
-        Resume result = null;
-        for (Resume r : storage) {
-            if (r.getUuid().equals(uuid)) {
-                result = r;
-                break;
-            }
-        }
-        return result;
+    public Resume doGet(Integer index) {
+        return storage.get(index);
     }
 
     @Override
-    public boolean doDelete(String uuid) {
-        return storage.removeIf(resume -> resume.getUuid().equals(uuid));
+    public void doDelete(Integer index) {
+        storage.remove(index.intValue());
     }
 
     @Override
@@ -58,14 +42,17 @@ public class ListStorage extends AbstractStorage {
         return storage.size();
     }
 
-    @Override
-    protected int getIndex(String uuid) {
-        Iterator<Resume> iterator = storage.iterator();
-        while (iterator.hasNext()) {
-            if (iterator.next().getUuid().equals(uuid)) {
-                return storage.indexOf(iterator.next());
+    protected Integer getSearchKey(String uuid) {
+        for (int i = 0; i < storage.size(); i++) {
+            if (storage.get(i).getUuid().equals(uuid)) {
+                return i;
             }
         }
         return -1;
+    }
+
+    @Override
+    protected boolean isExist(Integer searchKey) {
+        return searchKey >= 0;
     }
 }
