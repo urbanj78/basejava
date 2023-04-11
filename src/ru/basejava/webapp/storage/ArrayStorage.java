@@ -13,13 +13,13 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected boolean isExist(Object index) {
-        return (int) index >= 0;
+    public void finDelete(Object index) {
+        storage[(int) index] = storage[size - 1];
     }
 
     @Override
-    public void finDelete(Object index) {
-        storage[(int) index] = storage[size - 1];
+    protected boolean isExist(Object index) {
+        return (int) index >= 0;
     }
 
     @Override

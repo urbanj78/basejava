@@ -32,14 +32,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doDelete(Object index){
-        finDelete(index);
-        size--;
+    public Resume doGet(Object index) {
+        return storage[(int) index];
     }
 
     @Override
-    public Resume doGet(Object index) {
-        return storage[(int) index];
+    protected void doDelete(Object index){
+        finDelete(index);
+        size--;
     }
 
     public Resume[] getAll() {

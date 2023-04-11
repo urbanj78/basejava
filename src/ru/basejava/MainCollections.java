@@ -1,4 +1,4 @@
-package ru.basejava.webapp;
+package ru.basejava;
 
 import ru.basejava.webapp.model.Resume;
 
