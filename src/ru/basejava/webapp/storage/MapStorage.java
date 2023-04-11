@@ -1,7 +1,5 @@
 package ru.basejava.webapp.storage;
 
-import ru.basejava.webapp.exception.ExistStorageException;
-import ru.basejava.webapp.exception.NotExistStorageException;
 import ru.basejava.webapp.model.Resume;
 
 import java.util.HashMap;
@@ -28,12 +26,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected Resume doGet(Object searchKey) {
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            if (Objects.equals(searchKey, entry.getValue().toString())) {
-                return entry.getValue();
-            }
-        }
-        return null;
+        return storage.get((String) searchKey);
     }
 
     @Override
@@ -44,8 +37,8 @@ public class MapStorage extends AbstractStorage {
     @Override
     protected Object getSearchKey(String uuid) {
         for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            if (Objects.equals(uuid, entry.getValue().toString())) {
-                return uuid;
+            if (Objects.equals(uuid, entry.getKey())) {
+                return entry.getKey();
             }
         }
         return null;
@@ -53,12 +46,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object searchKey) {
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            if (Objects.equals(searchKey, entry.getValue().toString())) {
-                return true;
-            }
-        }
-        return false;
+        return storage.containsKey((String) searchKey);
     }
 
     @Override
