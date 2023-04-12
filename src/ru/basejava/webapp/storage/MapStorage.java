@@ -38,7 +38,7 @@ public class MapStorage extends AbstractStorage {
     protected Object getSearchKey(String uuid) {
         for (Map.Entry<String, Resume> entry : storage.entrySet()) {
             if (Objects.equals(uuid, entry.getKey())) {
-                return entry.getKey();
+                return uuid;
             }
         }
         return null;
