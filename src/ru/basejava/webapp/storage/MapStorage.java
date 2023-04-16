@@ -2,9 +2,7 @@ package ru.basejava.webapp.storage;
 
 import ru.basejava.webapp.model.Resume;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class MapStorage extends AbstractStorage {
     protected Map<String, Resume> storage = new HashMap<>();
@@ -50,8 +48,18 @@ public class MapStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return storage.values().toArray(new Resume[0]);
+    public List<Resume> getAllSorted() {
+        List<Resume> list = new ArrayList<>(storage.values());
+        Comparator<Resume> ResumeComparator = (o1, o2) -> {
+            int i = o1.getFullName().compareTo(o2.getFullName());
+            if (i == 0) {
+                return o1.getUuid().compareTo(o2.getUuid());
+            } else {
+                return i;
+            }
+        };
+        list.sort(ResumeComparator);
+        return list;
     }
 
     @Override

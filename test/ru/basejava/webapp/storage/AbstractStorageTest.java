@@ -8,7 +8,11 @@ import ru.basejava.webapp.exception.NotExistStorageException;
 import ru.basejava.webapp.exception.StorageException;
 import ru.basejava.webapp.model.Resume;
 
-class AbstractArrayStorageTest {
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+class AbstractStorageTest {
 
     private final Storage storage;
 
@@ -18,6 +22,11 @@ class AbstractArrayStorageTest {
     private static final String UUID_4 = "uuid4";
     private static final String UUID_NOT_EXIST = "dummy";
 
+    private static final String FULLNAME_1 = "John Dow";
+    private static final String FULLNAME_2 = "Василий Тёркин";
+    private static final String FULLNAME_3 = "Prime Optimus";
+    private static final String FULLNAME_4 = "Пётр Пустота";
+
     private static final Resume RESUME_1;
     private static final Resume RESUME_2;
     private static final Resume RESUME_3;
@@ -25,14 +34,14 @@ class AbstractArrayStorageTest {
     private static final Resume RESUME_NOT_EXIST;
 
     static {
-        RESUME_1 = new Resume(UUID_1);
-        RESUME_2 = new Resume(UUID_2);
-        RESUME_3 = new Resume(UUID_3);
-        RESUME_4 = new Resume(UUID_4);
+        RESUME_1 = new Resume(UUID_1, FULLNAME_1);
+        RESUME_2 = new Resume(UUID_2, FULLNAME_2);
+        RESUME_3 = new Resume(UUID_3, FULLNAME_3);
+        RESUME_4 = new Resume(UUID_4, FULLNAME_4);
         RESUME_NOT_EXIST = new Resume(UUID_NOT_EXIST);
     }
 
-    AbstractArrayStorageTest(Storage storage) {
+    AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
 
@@ -50,7 +59,7 @@ class AbstractArrayStorageTest {
         assertSize(0);
 
         Resume[] arrayToCompare = new Resume[0];
-        Assertions.assertArrayEquals(arrayToCompare, storage.getAll());
+        Assertions.assertArrayEquals(arrayToCompare, storage.getAllSorted().toArray(new Resume[0]));
     }
 
     @Test
@@ -114,9 +123,27 @@ class AbstractArrayStorageTest {
         final String UUID_2 = "uuid2";
         final String UUID_3 = "uuid3";
 
-        Resume[] actual = new Resume[]{new Resume(UUID_1), new Resume(UUID_2), new Resume(UUID_3)};
+        final String FULLNAME_1 = "John Dow";
+        final String FULLNAME_2 = "Василий Тёркин";
+        final String FULLNAME_3 = "Prime Optimus";
 
-        Assertions.assertArrayEquals(storage.getAll(), actual);
+        List<Resume> actual = new ArrayList<>();
+
+        actual.add(new Resume(UUID_1, FULLNAME_1));
+        actual.add(new Resume(UUID_2, FULLNAME_2));
+        actual.add(new Resume(UUID_3, FULLNAME_3));
+
+        Comparator<Resume> ResumeComparator = (o1, o2) -> {
+            int i = o1.getFullName().compareTo(o2.getFullName());
+            if (i == 0) {
+                return o1.getUuid().compareTo(o2.getUuid());
+            } else {
+                return i;
+            }
+        };
+        actual.sort(ResumeComparator);
+
+        Assertions.assertIterableEquals(storage.getAllSorted(), actual);
     }
 
     @Test

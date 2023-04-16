@@ -2,7 +2,7 @@ package ru.basejava.webapp.storage;
 
 import ru.basejava.webapp.model.Resume;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class ListStorage extends AbstractStorage {
     protected ArrayList<Resume> storage = new ArrayList<>();
@@ -33,8 +33,17 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume[] getAll() {
-        return storage.toArray(Resume[]::new);
+    public List<Resume> getAllSorted() {
+        Comparator<Resume> ResumeComparator = (o1, o2) -> {
+            int i = o1.getFullName().compareTo(o2.getFullName());
+            if (i == 0) {
+                return o1.getUuid().compareTo(o2.getUuid());
+            } else {
+                return i;
+            }
+        };
+        storage.sort(ResumeComparator);
+        return storage;
     }
 
     @Override
