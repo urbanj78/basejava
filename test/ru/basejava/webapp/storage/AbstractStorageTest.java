@@ -1,6 +1,7 @@
 package ru.basejava.webapp.storage;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.basejava.webapp.exception.ExistStorageException;
@@ -148,6 +149,7 @@ class AbstractStorageTest {
 
     @Test
     void storageOverflow() {
+        Assumptions.assumeFalse(storage instanceof ListStorage || storage instanceof MapUUIDStorage || storage instanceof MapResumeStorage, "No test required");
         storage.clear();
 
         for (int i = storage.size(); i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
