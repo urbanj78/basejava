@@ -14,11 +14,7 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     public void doUpdate(Resume r, Object searchKey) {
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            if (entry.getValue().getFullName().equals(searchKey)) {
-                storage.replace(r.getUuid(), r);
-            }
-        }
+        storage.put(r.getUuid(), r);
     }
 
     @Override
@@ -48,18 +44,8 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> list = new ArrayList<>(storage.values());
-        Comparator<Resume> ResumeComparator = (o1, o2) -> {
-            int i = o1.getFullName().compareTo(o2.getFullName());
-            if (i == 0) {
-                return o1.getUuid().compareTo(o2.getUuid());
-            } else {
-                return i;
-            }
-        };
-        list.sort(ResumeComparator);
-        return list;
+    protected List<Resume> doGetAll() {
+        return new ArrayList<>(storage.values());
     }
 
     @Override

@@ -134,14 +134,13 @@ class AbstractStorageTest {
         actual.add(new Resume(UUID_2, FULLNAME_2));
         actual.add(new Resume(UUID_3, FULLNAME_3));
 
-        Comparator<Resume> ResumeComparator = (o1, o2) -> {
-            int i = o1.getFullName().compareTo(o2.getFullName());
-            if (i == 0) {
-                return o1.getUuid().compareTo(o2.getUuid());
-            } else {
-                return i;
+        Comparator<Resume> ResumeComparator = Comparator.comparing(Resume::getFullName, (o1, o2) -> {
+            if (o1.compareTo(o2) == 0) {
+                Comparator.comparing(Resume::getUuid, Comparator.naturalOrder());
             }
-        };
+            return o1.compareTo(o2);
+        });
+
         actual.sort(ResumeComparator);
 
         Assertions.assertIterableEquals(storage.getAllSorted(), actual);

@@ -2,7 +2,10 @@ package ru.basejava.webapp.storage;
 
 import ru.basejava.webapp.model.Resume;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
 
@@ -25,6 +28,13 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected boolean isExist(Object index) {
         return (int) index >= 0;
+    }
+
+    @Override
+    protected List<Resume> doGetAll() {
+        ArrayList<Resume> list = new ArrayList<>();
+        Collections.addAll(list, storage);
+        return list;
     }
 
     @Override
