@@ -85,7 +85,7 @@ class AbstractStorageTest {
     @Test
     void saveExistStorage() {
         assertSize(3);
-        Assertions.assertThrows(ExistStorageException.class, () -> storage.save(RESUME_1));
+        Assertions.assertThrows(ExistStorageException.class, () -> storage.save(RESUME_2));
     }
 
     @Test
