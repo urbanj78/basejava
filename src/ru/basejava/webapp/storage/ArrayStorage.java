@@ -12,18 +12,18 @@ import java.util.List;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    public void finSave(Resume r, Object index) {
+    public void finSave(Resume r, Integer index) {
         storage[size] = r;
     }
 
     @Override
-    public void finDelete(Object index) {
-        storage[(int) index] = storage[size - 1];
+    public void finDelete(Integer index) {
+        storage[index] = storage[size - 1];
     }
 
     @Override
-    protected boolean isExist(Object index) {
-        return (int) index >= 0;
+    protected boolean isExist(Integer index) {
+        return index >= 0;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected Integer getSearchKey(String uuid) {
         for (int i = 0; i < size; i++) {
             if (uuid.equals(storage[i].getUuid())) {
                 return i;

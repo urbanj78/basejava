@@ -5,7 +5,7 @@ import ru.basejava.webapp.model.Resume;
 
 import java.util.*;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -17,12 +17,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void doUpdate(Resume r, Object index) {
-        storage[(int) index] = r;
+    protected void doUpdate(Resume r, Integer index) {
+        storage[index] = r;
     }
 
     @Override
-    public void doSave(Resume r, Object index) {
+    public void doSave(Resume r, Integer index) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("ERROR  Резюме " + r.getUuid() + " нельзя добавить, хранилище переполнено!", r.getUuid());
         } else {
@@ -32,12 +32,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public Resume doGet(Object index) {
-        return storage[(int) index];
+    public Resume doGet(Integer index) {
+        return storage[index];
     }
 
     @Override
-    protected void doDelete(Object index) {
+    protected void doDelete(Integer index) {
         finDelete(index);
         size--;
     }
@@ -65,9 +65,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return size;
     }
 
-    protected abstract boolean isExist(Object index);
+    protected abstract boolean isExist(Integer index);
 
-    protected abstract void finSave(Resume r, Object index);
+    protected abstract void finSave(Resume r, Integer index);
 
-    protected abstract void finDelete(Object index);
+    protected abstract void finDelete(Integer index);
 }
