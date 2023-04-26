@@ -4,5 +4,5 @@ public enum ContactType {
     TEL_NUMBER(),
     SKYPE(),
     EMAIL(),
-    HTTP_LINK();
+    HTTP_LINK()
 }
