@@ -3,10 +3,10 @@ package ru.basejava.webapp.model;
 import java.util.List;
 import java.util.Objects;
 
-public class CompanySection {
-    private List<Company> companies;
+public class CompanySection extends AbstractSection {
+    private final List<Company> companies;
 
-    public void setCompanies(List<Company> companies) {
+    public CompanySection(List<Company> companies) {
         this.companies = companies;
     }
 
