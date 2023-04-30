@@ -3,7 +3,7 @@ package ru.basejava.webapp.model;
 import java.util.List;
 import java.util.Objects;
 
-public class ListSection {
+public class ListSection extends AbstractSection {
     private final List<String> list;
 
     public ListSection(List<String> list) {
@@ -23,5 +23,12 @@ public class ListSection {
     @Override
     public int hashCode() {
         return Objects.hash(getList());
+    }
+
+    @Override
+    public String toString() {
+        return "ListSection{" +
+                "list=" + list +
+                '}';
     }
 }
