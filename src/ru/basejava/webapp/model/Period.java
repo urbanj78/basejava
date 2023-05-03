@@ -15,6 +15,13 @@ public class Period {
         this.description = description;
     }
 
+    public Period(String dateStart, String dateEnd, String title) {
+        this.dateStart = dateStart;
+        this.dateEnd = dateEnd;
+        this.title = title;
+        this.description = "";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
