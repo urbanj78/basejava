@@ -9,6 +9,14 @@ public class HTTP_Link {
         this.link = link;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
     @Override
     public String toString() {
         return "HTTP_Link{" +

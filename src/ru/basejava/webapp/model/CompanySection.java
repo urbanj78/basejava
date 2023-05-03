@@ -25,4 +25,18 @@ public class CompanySection extends AbstractSection {
     public int hashCode() {
         return Objects.hash(getCompanies());
     }
+
+    @Override
+    public String sectionForPrint() {
+        StringBuilder sb = new StringBuilder();
+        for (Company company : companies) {
+            sb.append(company.getWebSite().getName());
+            sb.append("\n");
+            sb.append(company.getWebSite().getLink());
+            sb.append("\n");
+            sb.append(company.getPeriods());
+        }
+        return sb.toString();
+    }
 }
+
