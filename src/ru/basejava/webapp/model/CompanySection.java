@@ -27,16 +27,10 @@ public class CompanySection extends AbstractSection {
     }
 
     @Override
-    public String sectionForPrint() {
-        StringBuilder sb = new StringBuilder();
-        for (Company company : companies) {
-            sb.append(company.getWebSite().getName());
-            sb.append("\n");
-            sb.append(company.getWebSite().getLink());
-            sb.append("\n");
-            sb.append(company.getPeriods());
-        }
-        return sb.toString();
+    public String toString() {
+        return "CompanySection{" +
+                "companies=" + companies +
+                '}';
     }
 }
 

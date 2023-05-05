@@ -32,18 +32,4 @@ public class ListSection extends AbstractSection {
                 "list=" + list +
                 '}';
     }
-
-    @Override
-    public String sectionForPrint() {
-        StringBuilder sb = new StringBuilder();
-
-        int i = 0;
-        while (i < list.size() - 1) {
-            sb.append("\n");
-            sb.append(list.get(i));
-            sb.append("\n");
-            i++;
-        }
-        return sb.toString();
-    }
 }

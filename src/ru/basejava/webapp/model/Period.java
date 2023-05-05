@@ -1,21 +1,22 @@
 package ru.basejava.webapp.model;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class Period {
-    private final String dateStart;
-    private final String dateEnd;
+    private final LocalDate dateStart;
+    private final LocalDate dateEnd;
     private final String title;
     private final String description;
 
-    public Period(String dateStart, String dateEnd, String title, String description) {
+    public Period(LocalDate dateStart, LocalDate dateEnd, String title, String description) {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.title = title;
         this.description = description;
     }
 
-    public Period(String dateStart, String dateEnd, String title) {
+    public Period(LocalDate dateStart, LocalDate dateEnd, String title) {
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.title = title;
@@ -47,5 +48,15 @@ public class Period {
     @Override
     public int hashCode() {
         return Objects.hash(dateStart, dateEnd, title, description);
+    }
+
+    @Override
+    public String toString() {
+        return "Period{" +
+                "dateStart=" + dateStart +
+                ", dateEnd=" + dateEnd +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

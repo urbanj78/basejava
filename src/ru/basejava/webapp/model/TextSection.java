@@ -25,11 +25,4 @@ public class TextSection extends AbstractSection {
     public String toString() {
         return textSection;
     }
-
-    @Override
-    public String sectionForPrint() {
-        return "\n" +
-                textSection +
-                "\n";
-    }
 }

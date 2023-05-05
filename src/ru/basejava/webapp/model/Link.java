@@ -1,10 +1,10 @@
 package ru.basejava.webapp.model;
 
-public class HTTP_Link {
+public class Link {
     private final String name;
     private final String link;
 
-    public HTTP_Link(String name, String link) {
+    public Link(String name, String link) {
         this.name = name;
         this.link = link;
     }
