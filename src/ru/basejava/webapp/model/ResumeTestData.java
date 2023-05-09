@@ -15,10 +15,10 @@ public class ResumeTestData {
         contacts.put(ContactType.TEL_NUMBER, "+7(921) 855-0482");
         contacts.put(ContactType.SKYPE, "grigory.kislin");
         contacts.put(ContactType.EMAIL, "gkislin@yandex.ru");
-        contacts.put(ContactType.HTTP_LINK1, new Link("Профиль LinkedIn", "https://www.linkedin.com/in/gkislin").toString());
-        contacts.put(ContactType.HTTP_LINK2, new Link("Профиль GitHub", "https://github.com/gkislin").toString());
-        contacts.put(ContactType.HTTP_LINK3, new Link("Профиль Stackoverflow", "https://stackoverflow.com/users/548473").toString());
-        contacts.put(ContactType.HTTP_LINK4, new Link("Домашняя страница", "http://gkislin.ru/").toString());
+        contacts.put(ContactType.LINKEDIN, new Link("Профиль LinkedIn", "https://www.linkedin.com/in/gkislin").toString());
+        contacts.put(ContactType.GITHUB, new Link("Профиль GitHub", "https://github.com/gkislin").toString());
+        contacts.put(ContactType.STACKOVERFLOW, new Link("Профиль Stackoverflow", "https://stackoverflow.com/users/548473").toString());
+        contacts.put(ContactType.HOME_PAGE, new Link("Домашняя страница", "http://gkislin.ru/").toString());
 
         sections.put(SectionType.PERSONAL, new TextSection("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры."));
         sections.put(SectionType.OBJECTIVE, new TextSection("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям"));

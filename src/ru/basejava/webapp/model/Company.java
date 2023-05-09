@@ -9,7 +9,6 @@ public class Company {
     private final List<Period> periods;
 
     public Company(Link webSite, List<Period> periods) {
-        //this.name = name;
         this.website = webSite;
         this.periods = periods;
     }

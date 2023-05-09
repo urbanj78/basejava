@@ -10,17 +10,13 @@ public class Period {
     private final String description;
 
     public Period(LocalDate dateStart, LocalDate dateEnd, String title, String description) {
+        Objects.requireNonNull(dateStart, "dateStart must not be null");
+        Objects.requireNonNull(dateEnd, "dateEnd must not be null");
+        Objects.requireNonNull(title, "title must not be null");
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
         this.title = title;
         this.description = description;
-    }
-
-    public Period(LocalDate dateStart, LocalDate dateEnd, String title) {
-        this.dateStart = dateStart;
-        this.dateEnd = dateEnd;
-        this.title = title;
-        this.description = "";
     }
 
     public String getPeriod() {

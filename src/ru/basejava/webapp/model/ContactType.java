@@ -4,10 +4,10 @@ public enum ContactType {
     TEL_NUMBER("Тел.:"),
     SKYPE("Skype:"),
     EMAIL("Почта:"),
-    HTTP_LINK1("Профиль LinkedIn"),
-    HTTP_LINK2("Профиль GitHub"),
-    HTTP_LINK3("Профиль Stackoverflow"),
-    HTTP_LINK4("Домашняя страница");
+    LINKEDIN("Профиль LinkedIn"),
+    GITHUB("Профиль GitHub"),
+    STACKOVERFLOW("Профиль Stackoverflow"),
+    HOME_PAGE("Домашняя страница");
 
     private final String title;
 
