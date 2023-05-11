@@ -11,7 +11,6 @@ import java.util.Objects;
 
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private final File directory;
-    private int size = 0;
 
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -31,7 +30,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         for (File file : files) {
             file.delete();
         }
-        size = 0;
     }
 
     @Override
