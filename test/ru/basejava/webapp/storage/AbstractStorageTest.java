@@ -8,6 +8,7 @@ import ru.basejava.webapp.exception.ExistStorageException;
 import ru.basejava.webapp.exception.NotExistStorageException;
 import ru.basejava.webapp.exception.StorageException;
 import ru.basejava.webapp.model.Resume;
+import ru.basejava.webapp.model.ResumeTestData;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,10 +36,10 @@ class AbstractStorageTest {
     private static final Resume RESUME_NOT_EXIST;
 
     static {
-        RESUME_1 = new Resume(UUID_1, FULLNAME_1);
-        RESUME_2 = new Resume(UUID_2, FULLNAME_2);
-        RESUME_3 = new Resume(UUID_3, FULLNAME_3);
-        RESUME_4 = new Resume(UUID_4, FULLNAME_4);
+        RESUME_1 = ResumeTestData.fillResume(UUID_1, FULLNAME_1);
+        RESUME_2 = ResumeTestData.fillResume(UUID_2, FULLNAME_2);
+        RESUME_3 = ResumeTestData.fillResume(UUID_3, FULLNAME_3);
+        RESUME_4 = ResumeTestData.fillResume(UUID_4, FULLNAME_4);
         RESUME_NOT_EXIST = new Resume(UUID_NOT_EXIST);
     }
 

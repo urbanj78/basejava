@@ -1,16 +1,17 @@
 package ru.basejava.webapp.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
+import ru.basejava.webapp.util.DateUtil;
+
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.*;
 
 public class ResumeTestData {
-    public static void main(String[] args) {
+    public static Resume fillResume(String uuid, String fullName) {
         Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
         Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
-        Resume resume = new Resume("uuid1", "Григорий Кислин");
+        Resume resume = new Resume(uuid, fullName);
 
         contacts.put(ContactType.TEL_NUMBER, "+7(921) 855-0482");
         contacts.put(ContactType.SKYPE, "grigory.kislin");
@@ -27,40 +28,30 @@ public class ResumeTestData {
 
         Link AlkatelLink = new Link("Alcatel", "http://www.alcatel.ru/");
 
-        //Company JOProjects = new Company(new Link("Java Online Projects", "http://javaops.ru/"), new ArrayList<>(List.of(new Period("10/2013", "Сейчас", "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."))));
-        //Company Wrike = new Company(new Link("Wrike", "https://www.wrike.com/"), new ArrayList<>(List.of(new Period(LocalDate.of(2014, 10, 01), LocalDate.of(2016, 01, 01), "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."))));
-        //Company RITCenter = new Company(new Link("RIT Center", ""), new ArrayList<>(List.of(new Period("04/2012", "10/2014", "Java архитектор", "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python"))));
-        //Company LuxoftW = new Company(new Link("Luxoft", "http://www.luxoft.ru/"), new ArrayList<>(List.of(new Period("12/2010", "04/2012", "Ведущий программист", "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5."))));
-        //Company Yota = new Company(new Link("Yota", "https://www.yota.ru/"), new ArrayList<>(List.of(new Period("06/2008", "12/2010", "Ведущий специалист", "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)"))));
-        //Company Enkata = new Company(new Link("Enkata", "http://enkata.com/"), new ArrayList<>(List.of(new Period("03/2007", "06/2008", "Разработчик ПО", "Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining)."))));
-        //Company SiemensW = new Company(new Link("Siemens AG", "https://www.siemens.com/ru/ru/home.html"), new ArrayList<>(List.of(new Period("01/2005", "02/2007", "Разработчик ПО", "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)."))));
-        //Company AlcatelW = new Company(AlkatelLink, new ArrayList<>(List.of(new Period("09/1997", "01/2005", "Инженер по аппаратному и программному тестированию", "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)."))));
+        LocalDate now = LocalDate.now();
 
-        //sections.put(SectionType.EXPERIENCE, new CompanySection(new ArrayList<>(Arrays.asList(JOProjects, Wrike, RITCenter, LuxoftW, Yota, Enkata, SiemensW, AlcatelW))));
+        Company JOProjects = new Company(new Link("Java Online Projects", "http://javaops.ru/"), new ArrayList<>(List.of(new Period(DateUtil.of(2013, Month.of(10)), DateUtil.of(now.getYear(), now.getMonth()), "Автор проекта.", "Создание, организация и проведение Java онлайн проектов и стажировок."))));
+        Company Wrike = new Company(new Link("Wrike", "https://www.wrike.com/"), new ArrayList<>(List.of(new Period(LocalDate.of(2014, 10, 1), LocalDate.of(2016, 1, 1), "Старший разработчик (backend)", "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."))));
+        Company RITCenter = new Company(new Link("RIT Center", ""), new ArrayList<>(List.of(new Period(DateUtil.of(2012, Month.of(4)), DateUtil.of(2014, Month.of(10)), "Java архитектор", "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python"))));
+        Company LuxoftW = new Company(new Link("Luxoft", "http://www.luxoft.ru/"), new ArrayList<>(List.of(new Period(DateUtil.of(2010, Month.of(12)), DateUtil.of(2012, Month.of(4)), "Ведущий программист", "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5."))));
+        Company Yota = new Company(new Link("Yota", "https://www.yota.ru/"), new ArrayList<>(List.of(new Period(DateUtil.of(2008, Month.of(6)), DateUtil.of(2010, Month.of(12)), "Ведущий специалист", "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)"))));
+        Company Enkata = new Company(new Link("Enkata", "http://enkata.com/"), new ArrayList<>(List.of(new Period(DateUtil.of(2007, Month.of(3)), DateUtil.of(2008, Month.of(6)), "Разработчик ПО", "Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining)."))));
+        Company SiemensW = new Company(new Link("Siemens AG", "https://www.siemens.com/ru/ru/home.html"), new ArrayList<>(List.of(new Period(DateUtil.of(2005, Month.of(1)), DateUtil.of(2007, Month.of(2)), "Разработчик ПО", "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix)."))));
+        Company AlcatelW = new Company(AlkatelLink, new ArrayList<>(List.of(new Period(DateUtil.of(1997, Month.of(9)), DateUtil.of(2005, Month.of(1)), "Инженер по аппаратному и программному тестированию", "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM)."))));
 
-        //Company Coursera = new Company(new Link("Coursera", "https://www.coursera.org/course/progfun"), new ArrayList<>(List.of(new Period("03/2013", "05/2013", "'Functional Programming Principles in Scala' by Martin Odersky"))));
-        //Company LuxoftE = new Company(new Link("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"), new ArrayList<>(List.of(new Period("03/2011", "04/2011", "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'"))));
-        //Company SiemensE = new Company(new Link("Siemens AG", "https://www.siemens.ru"), new ArrayList<>(List.of(new Period("01/2005", "04/2005", "3 месяца обучения мобильным IN сетям (Берлин)"))));
-        //Company AlcatelE = new Company(AlkatelLink, new ArrayList<>(List.of(new Period("09/1997", "03/1998", "6 месяцев обучения цифровым телефонным сетям (Москва)"))));
-        //Company IFMO = new Company(new Link("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "http://www.ifmo.ru/"), new ArrayList<>(Arrays.asList(new Period("09/1993", "07/1996", "Аспирантура (программист С, С++)", ""), new Period("09/1987", "07/1993", "Инженер (программист Fortran, C)"))));
-        //Company MIPT = new Company(new Link("Заочная физико-техническая школа при МФТИ", "https://mipt.ru/"), new ArrayList<>(List.of(new Period("09/1984", "06/1987", "Закончил с отличием"))));
+        sections.put(SectionType.EXPERIENCE, new CompanySection(new ArrayList<>(Arrays.asList(JOProjects, Wrike, RITCenter, LuxoftW, Yota, Enkata, SiemensW, AlcatelW))));
 
-        //sections.put(SectionType.EDUCATION, new CompanySection(new ArrayList<>(Arrays.asList(Coursera, LuxoftE, SiemensE, AlcatelE, IFMO, MIPT))));
+        Company Coursera = new Company(new Link("Coursera", "https://www.coursera.org/course/progfun"), new ArrayList<>(List.of(new Period(DateUtil.of(2013, Month.of(3)), DateUtil.of(2013, Month.of(5)), "'Functional Programming Principles in Scala' by Martin Odersky", null))));
+        Company LuxoftE = new Company(new Link("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"), new ArrayList<>(List.of(new Period(DateUtil.of(2011, Month.of(3)), DateUtil.of(2011, Month.of(4)), "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.'", null))));
+        Company SiemensE = new Company(new Link("Siemens AG", "https://www.siemens.ru"), new ArrayList<>(List.of(new Period(DateUtil.of(2005, Month.of(1)), DateUtil.of(2005, Month.of(4)), "3 месяца обучения мобильным IN сетям (Берлин)", null))));
+        Company AlcatelE = new Company(AlkatelLink, new ArrayList<>(List.of(new Period(DateUtil.of(1997, Month.of(8)), DateUtil.of(1998, Month.of(3)), "6 месяцев обучения цифровым телефонным сетям (Москва)", null))));
+        Company IFMO = new Company(new Link("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики", "http://www.ifmo.ru/"), new ArrayList<>(Arrays.asList(new Period(DateUtil.of(1993, Month.of(9)), DateUtil.of(1996, Month.of(7)), "Аспирантура (программист С, С++)", null), new Period(DateUtil.of(1987, Month.of(9)), DateUtil.of(1993, Month.of(7)), "Инженер (программист Fortran, C)", null))));
+        Company MIPT = new Company(new Link("Заочная физико-техническая школа при МФТИ", "https://mipt.ru/"), new ArrayList<>(List.of(new Period(DateUtil.of(1984, Month.of(9)), DateUtil.of(1987, Month.of(6)), "Закончил с отличием", null))));
 
-        System.out.println(resume.getFullName());
+        sections.put(SectionType.EDUCATION, new CompanySection(new ArrayList<>(Arrays.asList(Coursera, LuxoftE, SiemensE, AlcatelE, IFMO, MIPT))));
 
-        ContactType[] contactTypes = ContactType.values();
-
-        for (ContactType contactType : contactTypes) {
-            System.out.print(contactType.getTitle());
-            System.out.println(contacts.get(contactType));
-        }
-
-        SectionType[] sectionTypes = SectionType.values();
-
-        for (SectionType sectionType : sectionTypes) {
-            System.out.println(sectionType.getTitle());
-        //    System.out.println(sections.get(sectionType).sectionForPrint());
-        }
+        return resume;
     }
 }
+
+
