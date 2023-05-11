@@ -8,8 +8,8 @@ public class Company {
     private final Link website;
     private final List<Period> periods;
 
-    public Company(Link webSite, List<Period> periods) {
-        this.website = webSite;
+    public Company(Link website, List<Period> periods) {
+        this.website = website;
         this.periods = periods;
     }
 
