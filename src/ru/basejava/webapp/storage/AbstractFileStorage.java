@@ -8,13 +8,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-
 public abstract class AbstractFileStorage extends AbstractStorage<File> {
     private final File directory;
+    private int size = 0;
 
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
@@ -29,12 +25,17 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     public void clear() {
-
+        File[] files = directory.listFiles();
+        assert files != null;
+        for (File file : files) {
+            file.delete();
+        }
+        size = 0;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -60,6 +61,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
+        size++;
     }
 
     protected abstract void doWrite(Resume r, File file) throws IOException;
