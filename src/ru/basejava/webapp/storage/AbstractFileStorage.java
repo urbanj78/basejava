@@ -26,16 +26,20 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     public void clear() {
         File[] files = directory.listFiles();
-        assert files != null;
+        if (files == null) {
+            throw new StorageException(" directory is empty", directory.getName());
+        }
         for (File file : files) {
-            file.delete();
+            doDelete(file);
         }
     }
 
     @Override
     public int size() {
         File[] files = directory.listFiles();
-        assert files != null;
+        if (files == null) {
+            throw new StorageException(" directory is empty", directory.getName());
+        }
         return files.length;
     }
 
@@ -47,7 +51,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(Resume r, File file) {
         try {
-            file.createNewFile();
             doWrite(r, file);
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
@@ -69,11 +72,13 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
         }
     }
 
-    protected abstract void doWrite(Resume r, File file) throws IOException;
-
     @Override
     protected Resume doGet(File file) {
-        return new Resume(file.getName());
+        try {
+            return doRead(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -84,11 +89,17 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected List<Resume> doGetAll() {
         File[] files = directory.listFiles();
-        assert files != null;
+        if (files == null) {
+            throw new StorageException(" directory is empty", directory.getName());
+        }
         List<Resume> list = new ArrayList<>(files.length);
         for (File file : files) {
             list.add(doGet(file));
         }
         return list;
     }
+
+    protected abstract void doWrite(Resume r, File file) throws IOException;
+
+    protected abstract Resume doRead(File file) throws IOException;
 }
