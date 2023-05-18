@@ -10,11 +10,14 @@ import ru.basejava.webapp.exception.StorageException;
 import ru.basejava.webapp.model.Resume;
 import ru.basejava.webapp.model.ResumeTestData;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 class AbstractStorageTest {
+
+    protected static final File STORAGE_DIR = new File("C:\\projects\\storage");
 
     private final Storage storage;
 

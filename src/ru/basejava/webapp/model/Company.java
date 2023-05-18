@@ -1,5 +1,7 @@
 package ru.basejava.webapp.model;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -10,7 +12,9 @@ import java.util.Objects;
 import static ru.basejava.webapp.util.DateUtil.NOW;
 import static ru.basejava.webapp.util.DateUtil.of;
 
-public class Company {
+public class Company implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
     private final Link website;
     private List<Period> periods = new ArrayList<>();
 
@@ -43,7 +47,9 @@ public class Company {
                 '}';
     }
 
-    public static class Period {
+    public static class Period implements Serializable {
+        @Serial
+        private static final long serialVersionUID = 1L;
         private final LocalDate dateStart;
         private final LocalDate dateEnd;
         private final String title;

@@ -31,7 +31,11 @@ public abstract class AbstractStorage<SK> implements Storage {
     public Resume get(String uuid) {
         LOG.info("Get " + uuid);
         SK searchKey = getExistingSearchKey(uuid);
-        return doGet(searchKey);
+        try {
+            return doGet(searchKey);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void delete(String uuid) {

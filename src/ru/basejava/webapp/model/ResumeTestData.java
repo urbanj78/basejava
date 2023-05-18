@@ -11,7 +11,7 @@ import static ru.basejava.webapp.util.DateUtil.NOW;
 public class ResumeTestData {
     public static Resume fillResume(String uuid, String fullName) {
         Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
-        Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+        Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
         Resume resume = new Resume(uuid, fullName);
 
