@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
-    private final File directory;
+public abstract class AbstractFileStorage<FP> extends AbstractStorage<File> {
+    private final FP directory;
 
-    protected AbstractFileStorage(File directory) {
+    protected AbstractFileStorage(FP directory) {
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
@@ -43,8 +43,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected File getSearchKey(String uuid) {
-        return new File(directory, uuid);
+    protected FP getSearchKey(String uuid) {
+        return new FP(directory, uuid);
     }
 
     @Override
@@ -62,7 +62,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected void doSave(Resume r, File file) {
+    protected void doSave(Resume r, FP file) {
         try {
             file.createNewFile();
         } catch (IOException e) {
@@ -72,7 +72,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     }
 
     @Override
-    protected Resume doGet(File file) {
+    protected Resume doGet(FP file) {
         try {
             return doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
