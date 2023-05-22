@@ -15,29 +15,34 @@ public class MainFile {
             throw new RuntimeException("Error", e);
         }
 
-        filesInDir("C:\\Users\\urbanj\\IdeaProjects\\basejava\\src");
+        File dir = new File("./src/ru/basejava");
+        System.out.println(dir.isDirectory());
+        String[] list = dir.list();
+        if (list != null) {
+            for (String name : list) {
+                System.out.println(name);
+            }
+        }
 
         try (FileInputStream fis = new FileInputStream(filePath)) {
             System.out.println(fis.read());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        printDirectoryDeeply(dir);
     }
-    public static void filesInDir(String path) {
-        File dir = new File(path);
+
+    // TODO: make pretty output
+    public static void printDirectoryDeeply(File dir) {
         File[] files = dir.listFiles();
-        assert files != null;
-        for (File file : files) {
-            if (file.isDirectory()) {
-                System.out.println();
-            }
-            System.out.println(file.getName());
-            if (file.isDirectory()) {
-                System.out.println();
-                try {
-                    filesInDir(file.getCanonicalPath());
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile()) {
+                    System.out.println("\tFile: " + file.getName());
+                } else if (file.isDirectory()) {
+                    System.out.println("\nDirectory: " + file.getName() + "\n");
+                    printDirectoryDeeply(file);
                 }
             }
         }
