@@ -4,12 +4,8 @@ import ru.basejava.webapp.exception.StorageException;
 import ru.basejava.webapp.model.Resume;
 
 import java.io.*;
-import java.nio.file.Path;
 
-public class ObjectStreamPathStorage extends AbstractPathStorage {
-    protected ObjectStreamPathStorage(Path directory) {
-        super(directory.toString());
-    }
+public class ObjectSerializing implements Serializing {
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
@@ -23,7 +19,7 @@ public class ObjectStreamPathStorage extends AbstractPathStorage {
         try (ObjectInputStream ois = new ObjectInputStream(is)) {
             return (Resume) ois.readObject();
         } catch (ClassNotFoundException e) {
-            throw new StorageException("Error read resume", null, e);
+            throw new StorageException("Read Error", null, e);
         }
     }
 }

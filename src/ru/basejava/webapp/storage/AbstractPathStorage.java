@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path> {
-    private Path directory;
+public abstract class AbstractPathStorage extends AbstractStorage<Path> implements Serializing {
+    private final Path directory;
 
-    protected abstract void doWrite(Resume r, OutputStream os) throws IOException;
+    public abstract void doWrite(Resume r, OutputStream os) throws IOException;
 
-    protected abstract Resume doRead(InputStream is) throws IOException;
+    public abstract Resume doRead(InputStream is) throws IOException;
 
     protected AbstractPathStorage(String dir) {
         directory = Paths.get(dir);

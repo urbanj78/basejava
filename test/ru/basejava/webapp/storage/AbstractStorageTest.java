@@ -11,6 +11,7 @@ import ru.basejava.webapp.model.Resume;
 import ru.basejava.webapp.model.ResumeTestData;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -59,7 +60,7 @@ class AbstractStorageTest {
     }
 
     @Test
-    void clear() {
+    void clear() throws IOException {
         storage.clear();
         assertSize(0);
 
@@ -80,14 +81,14 @@ class AbstractStorageTest {
     }
 
     @Test
-    void save() {
+    void save() throws IOException {
         storage.save(RESUME_4);
         assertGet(storage.get(UUID_4));
         assertSize(4);
     }
 
     @Test
-    void saveExistStorage() {
+    void saveExistStorage() throws IOException {
         assertSize(3);
         Assertions.assertThrows(ExistStorageException.class, () -> storage.save(RESUME_2));
     }
@@ -105,7 +106,7 @@ class AbstractStorageTest {
     }
 
     @Test
-    void delete() {
+    void delete() throws IOException {
         storage.delete(UUID_2);
         assertSize(2);
         Assertions.assertThrows(NotExistStorageException.class, () -> storage.get(UUID_2));
@@ -117,7 +118,7 @@ class AbstractStorageTest {
     }
 
     @Test
-    void size() {
+    void size() throws IOException {
         assertSize(3);
     }
 
@@ -151,8 +152,8 @@ class AbstractStorageTest {
     }
 
     @Test
-    void storageOverflow() {
-        Assumptions.assumeFalse(storage instanceof ListStorage || storage instanceof MapUUIDStorage || storage instanceof MapResumeStorage, "No test required");
+    void storageOverflow() throws IOException {
+        Assumptions.assumeFalse(storage instanceof ListStorage || storage instanceof MapUUIDStorage || storage instanceof MapResumeStorage || storage instanceof ObjectStreamStorageTest || storage instanceof ObjectStreamPathStorageTest, "No test required");
         storage.clear();
 
         for (int i = storage.size(); i < AbstractArrayStorage.STORAGE_LIMIT; i++) {
@@ -166,7 +167,7 @@ class AbstractStorageTest {
         Assertions.assertThrows(StorageException.class, () -> storage.save(new Resume()));
     }
 
-    private void assertSize(int size) {
+    private void assertSize(int size) throws IOException {
         Assertions.assertEquals(size, storage.size());
     }
 

@@ -8,15 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File> {
-    private File directory;
+public abstract class AbstractFileStorage extends AbstractStorage<File> implements Serializing {
+    private final File directory;
 
-    protected abstract void doWrite(Resume r, OutputStream os) throws IOException;
+    private ObjectSerializing serializer;
 
-    protected abstract Resume doRead(InputStream is) throws IOException;
+    public abstract void doWrite(Resume r, OutputStream os) throws IOException;
+
+    public abstract Resume doRead(InputStream is) throws IOException;
 
     protected AbstractFileStorage(File directory) {
         Objects.requireNonNull(directory, "directory must not be null");
+        this.serializer = new ObjectSerializing();
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
         }
