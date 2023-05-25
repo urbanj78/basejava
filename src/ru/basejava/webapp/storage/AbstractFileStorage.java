@@ -17,16 +17,17 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> implemen
 
     public abstract Resume doRead(InputStream is) throws IOException;
 
-    protected AbstractFileStorage(File directory) {
-        Objects.requireNonNull(directory, "directory must not be null");
+    protected AbstractFileStorage(String path) {
+        File dir = new File(path);
+        Objects.requireNonNull(dir, "directory must not be null");
         this.serializer = new ObjectSerializing();
-        if (!directory.isDirectory()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + " is not directory");
+        if (!dir.isDirectory()) {
+            throw new IllegalArgumentException(dir.getAbsolutePath() + " is not directory");
         }
-        if (!directory.canRead() || !directory.canWrite()) {
-            throw new IllegalArgumentException(directory.getAbsolutePath() + " is not readable/writable");
+        if (!dir.canRead() || !dir.canWrite()) {
+            throw new IllegalArgumentException(dir.getAbsolutePath() + " is not readable/writable");
         }
-        this.directory = directory;
+        this.directory = dir;
     }
 
     @Override

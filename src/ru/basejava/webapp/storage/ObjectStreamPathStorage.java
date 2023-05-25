@@ -8,7 +8,7 @@ import java.nio.file.Path;
 
 public class ObjectStreamPathStorage extends AbstractPathStorage {
     protected ObjectStreamPathStorage(Path directory) {
-        super(directory.toString());
+        super(directory.toFile().getAbsolutePath());
     }
 
     @Override

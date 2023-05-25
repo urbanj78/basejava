@@ -12,8 +12,10 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
 
     public void clear() {
-        Arrays.fill(storage, 0, size - 1, null);
-        size = 0;
+        if (size > 0) {
+            Arrays.fill(storage, 0, size - 1, null);
+            size = 0;
+        }
     }
 
     @Override

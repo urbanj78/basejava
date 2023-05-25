@@ -7,9 +7,9 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public abstract class AbstractPathStorage extends AbstractStorage<Path> implements Serializing {
     private final Path directory;
@@ -54,7 +54,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> implemen
         try {
             doWrite(r, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("Couldn't update file " + path.getFileName(), r.getUuid(), e);
+            throw new StorageException("Path write error ", r.getUuid(), e);
         }
     }
 
@@ -68,7 +68,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> implemen
         try {
             Files.createFile(path);
         } catch (IOException e) {
-            throw new StorageException("Couldn't create file " + path.getFileName(), r.getUuid(), e);
+            throw new StorageException("Couldn't create path " + path, r.getUuid(), e);
         }
         doUpdate(r, path);
     }
@@ -78,7 +78,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> implemen
         try {
             return doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
-            throw new StorageException("File read error", path.getFileName().toString(), e);
+            throw new StorageException("Path read error", path.toString(), e);
         }
     }
 
@@ -87,17 +87,17 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path> implemen
         try {
             Files.delete(path);
         } catch (IOException e) {
-            throw new StorageException("File delete error", path.getFileName().toString());
+            throw new StorageException("Path delete error", path.toString());
         }
     }
 
     @Override
     protected List<Resume> doGetAll() {
-        List<Resume> list = new ArrayList<>(this.size());
-        for (Path path : directory) {
-            list.add(doGet(path));
+        try {
+            return Files.list(directory).map(this::doGet).collect(Collectors.toList());
+        } catch (IOException e) {
+            throw new StorageException("Directory read error", directory.toString(), e);
         }
-        return list;
     }
 }
 

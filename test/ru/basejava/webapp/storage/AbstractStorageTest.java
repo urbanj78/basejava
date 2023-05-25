@@ -53,7 +53,7 @@ class AbstractStorageTest {
 
     @BeforeEach
     public void setUp() {
-        //storage.clear();
+        storage.clear();
         storage.save(RESUME_1);
         storage.save(RESUME_2);
         storage.save(RESUME_3);
@@ -153,7 +153,7 @@ class AbstractStorageTest {
 
     @Test
     void storageOverflow() throws IOException {
-        Assumptions.assumeFalse(storage instanceof ListStorage || storage instanceof MapUUIDStorage || storage instanceof MapResumeStorage || storage instanceof ObjectStreamStorageTest || storage instanceof ObjectStreamPathStorageTest, "No test required");
+        Assumptions.assumeFalse(storage instanceof ListStorage || storage instanceof MapUUIDStorage || storage instanceof MapResumeStorage || storage instanceof ObjectStreamPathStorage || storage instanceof ObjectStreamStorage, "No test required");
         storage.clear();
 
         for (int i = storage.size(); i < AbstractArrayStorage.STORAGE_LIMIT; i++) {

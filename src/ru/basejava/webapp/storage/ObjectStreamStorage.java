@@ -8,7 +8,7 @@ import java.io.*;
 public class ObjectStreamStorage extends AbstractFileStorage {
 
     protected ObjectStreamStorage(File directory) {
-        super(directory);
+        super(directory.getAbsolutePath());
     }
 
     @Override
