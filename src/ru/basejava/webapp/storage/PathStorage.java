@@ -91,7 +91,7 @@ public class PathStorage extends AbstractStorage<Path> {
         return (int) storageToList().count();
     }
 
-    protected Stream<Path> storageToList(){
+    private Stream<Path> storageToList(){
         try {
             return Files.list(directory);
         } catch (IOException e) {
