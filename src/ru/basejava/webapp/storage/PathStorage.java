@@ -3,7 +3,6 @@ package ru.basejava.webapp.storage;
 import ru.basejava.webapp.exception.StorageException;
 import ru.basejava.webapp.model.Resume;
 
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -15,14 +14,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static ru.basejava.webapp.storage.serializing.Serializing.O_S_SERIALIZER;
+
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
 
-    private final ObjectStreamSerializing serializer;
-
-    protected PathStorage(String dir, ObjectStreamSerializing serializer) {
+    protected PathStorage(String dir) {
         directory = Paths.get(dir);
-        this.serializer = serializer;
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
@@ -32,7 +30,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected void doUpdate(Resume r, Path searchKey) {
         try {
-            serializer.doWrite(r, new BufferedOutputStream(Files.newOutputStream(searchKey)));
+            O_S_SERIALIZER.doWrite(r, new BufferedOutputStream(Files.newOutputStream(searchKey)));
         } catch (IOException e) {
             throw new StorageException("Path write error ", r.getUuid(), e);
         }
@@ -51,7 +49,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume doGet(Path searchKey) {
         try {
-            return serializer.doRead(new BufferedInputStream(Files.newInputStream(searchKey)));
+            return O_S_SERIALIZER.doRead(new BufferedInputStream(Files.newInputStream(searchKey)));
         } catch (IOException e) {
             throw new StorageException("Path read error", searchKey.toString(), e);
         }

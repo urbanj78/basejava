@@ -8,15 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static ru.basejava.webapp.storage.serializing.Serializing.O_S_SERIALIZER;
+
 public class FileStorage extends AbstractStorage<File> {
     private final File directory;
 
-    private final ObjectStreamSerializing serializer;
-
-    protected FileStorage(String path, ObjectStreamSerializing serializer) {
+    protected FileStorage(String path) {
         File dir = new File(path);
         Objects.requireNonNull(dir, "directory must not be null");
-        this.serializer = serializer;
         if (!dir.isDirectory()) {
             throw new IllegalArgumentException(dir.getAbsolutePath() + " is not directory");
         }
@@ -29,7 +28,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected void doUpdate(Resume r, File searchKey) {
         try {
-            serializer.doWrite(r, new BufferedOutputStream(new FileOutputStream(searchKey)));
+            O_S_SERIALIZER.doWrite(r, new BufferedOutputStream(new FileOutputStream(searchKey)));
         } catch (IOException e) {
             throw new StorageException("File write error", r.getUuid(), e);
         }
@@ -48,7 +47,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected Resume doGet(File searchKey) {
         try {
-            return serializer.doRead(new BufferedInputStream(new FileInputStream(searchKey)));
+            return O_S_SERIALIZER.doRead(new BufferedInputStream(new FileInputStream(searchKey)));
         } catch (IOException e) {
             throw new StorageException("File read error", searchKey.getName(), e);
         }
