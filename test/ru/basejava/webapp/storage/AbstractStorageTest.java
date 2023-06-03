@@ -4,14 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import ru.basejava.webapp.exception.ExistStorageException;
-import ru.basejava.webapp.exception.NotExistStorageException;
-import ru.basejava.webapp.exception.StorageException;
-import ru.basejava.webapp.model.Resume;
-import ru.basejava.webapp.model.ResumeTestData;
+import ru.basejava.webapp.exception.*;
+import ru.basejava.webapp.model.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -45,6 +43,30 @@ class AbstractStorageTest {
         RESUME_3 = ResumeTestData.fillResume(UUID_3, FULLNAME_3);
         RESUME_4 = ResumeTestData.fillResume(UUID_4, FULLNAME_4);
         RESUME_NOT_EXIST = new Resume(UUID_NOT_EXIST);
+
+        RESUME_1.addContact(ContactType.EMAIL, "mail1@ya.ru");
+        RESUME_1.addContact(ContactType.TEL_NUMBER, "11111");
+        RESUME_1.addSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
+        RESUME_1.addSection(SectionType.PERSONAL, new TextSection("Personal data"));
+        RESUME_1.addSection(SectionType.ACHIEVEMENT, new ListSection("Achivment11", "Achivment12", "Achivment13"));
+        RESUME_1.addSection(SectionType.QUALIFICATIONS, new ListSection("Java", "SQL", "JavaScript"));
+        RESUME_1.addSection(SectionType.EXPERIENCE,
+                new CompanySection(
+                        new Company("Organization11", "http://Organization11.ru",
+                                new Company.Period(2005, Month.JANUARY, "position1", "content1"),
+                                new Company.Period(2001, Month.MARCH, 2005, Month.JANUARY, "position2", "content2"))));
+        RESUME_1.addSection(SectionType.EDUCATION,
+                new CompanySection(
+                        new Company("Institute", null,
+                                new Company.Period(1996, Month.JANUARY, 2000, Month.DECEMBER, "aspirant", null),
+                                new Company.Period(2001, Month.MARCH, 2005, Month.JANUARY, "student", "IT facultet")),
+                        new Company("Organization12", "http://Organization12.ru")));
+        RESUME_2.addContact(ContactType.SKYPE, "skype2");
+        RESUME_2.addContact(ContactType.TEL_NUMBER, "22222");
+        RESUME_1.addSection(SectionType.EXPERIENCE,
+                new CompanySection(
+                        new Company("Organization2", "http://Organization2.ru",
+                                new Company.Period(2015, Month.JANUARY, "position1", "content1"))));
     }
 
     AbstractStorageTest(Storage storage) {

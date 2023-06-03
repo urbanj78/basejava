@@ -2,6 +2,7 @@ package ru.basejava.webapp.storage;
 
 import ru.basejava.webapp.exception.StorageException;
 import ru.basejava.webapp.model.Resume;
+import ru.basejava.webapp.storage.serializing.Serializing;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -19,8 +20,11 @@ import static ru.basejava.webapp.storage.serializing.Serializing.O_S_SERIALIZER;
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
 
-    protected PathStorage(String dir) {
+    private Serializing serializer;
+
+    protected PathStorage(String dir, Serializing serializer) {
         directory = Paths.get(dir);
+        this.serializer = serializer;
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or is not writable");
