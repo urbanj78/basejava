@@ -30,6 +30,14 @@ public class Company implements Serializable {
         this.periods = periods;
     }
 
+    public Link getWebsite() {
+        return website;
+    }
+
+    public List<Period> getPeriods() {
+        return periods;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -49,6 +57,7 @@ public class Company implements Serializable {
                 ", periods=" + periods +
                 '}';
     }
+
 
     public static class Period implements Serializable {
         @Serial
