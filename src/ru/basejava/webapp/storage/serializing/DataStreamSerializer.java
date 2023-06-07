@@ -19,29 +19,15 @@ public class DataStreamSerializer implements Serializing {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             }
-            Map<SectionType, Section> sections = r.getSections();
-            for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-                dos.writeUTF(entry.getKey().getTitle());
-                if (entry instanceof TextSection) {
-                    dos.writeUTF(entry.getValue().toString());
-                } else if (entry instanceof ListSection) {
-                    List<String> list = ((ListSection) entry).getList();
-                    for (String s : list) {
-                        dos.writeUTF(s);
-                    }
-                } else if (entry instanceof CompanySection) {
-                    List<Company> companies = ((CompanySection) entry).getCompanies();
-                    for (Company company : companies){
-                        dos.writeUTF(company.getWebsite().getName());
-                        dos.writeUTF(company.getWebsite().getLink());
-                        List<Company.Period> periods = company.getPeriods();
-                        for (Company.Period period : periods) {
-                            dos.writeUTF(period.getStartDate().toString());
-                            dos.writeUTF(period.getEndDate().toString());
-                            dos.writeUTF(period.getTitle());
-                            dos.writeUTF(period.getDescription());
-                        }
-                    }
+
+            for (Map.Entry<SectionType, Section> entry : r.getSections().entrySet()) {
+                SectionType sectionType = entry.getKey();
+                Section section = entry.getValue();
+                dos.writeUTF(sectionType.name());
+                switch (sectionType) {
+                    case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) section).getText());
+                    case ACHIEVEMENT, QUALIFICATIONS -> listWrite(dos, ((ListSection) section).getList());
+                    case EDUCATION, EXPERIENCE -> companyWrite(dos, ((CompanySection) section).getCompanies());
                 }
             }
         }
@@ -59,6 +45,27 @@ public class DataStreamSerializer implements Serializing {
             }
             // TODO implements sections
             return resume;
+        }
+    }
+
+    private void listWrite(DataOutputStream dos, List<String> list) throws IOException {
+        dos.writeInt(list.size());
+        for (String text : list) {
+            dos.writeUTF(text);
+        }
+    }
+
+    private void companyWrite(DataOutputStream dos, List<Company> section) throws IOException {
+        dos.writeInt(section.size());
+        for (Company com : section) {
+            dos.writeUTF(com.getWebsite().getName());
+            dos.writeUTF(com.getWebsite().getLink());
+            for (Company.Period period : com.getPeriods()) {
+                dos.writeInt(period.getStartDate().getYear());
+                dos.writeInt(period.getEndDate().getMonth().getValue());
+                dos.writeUTF(period.getTitle());
+                dos.writeUTF(period.getDescription());
+            }
         }
     }
 }
