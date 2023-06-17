@@ -29,13 +29,14 @@ public class CompanySection extends Section {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof CompanySection that)) return false;
-        return Objects.equals(getCompanies(), that.getCompanies());
+        if (o == null || getClass() != o.getClass()) return false;
+        CompanySection that = (CompanySection) o;
+        return companies.equals(that.companies);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getCompanies());
+        return companies.hashCode();
     }
 
     @Override

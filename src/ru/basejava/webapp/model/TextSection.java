@@ -16,8 +16,9 @@ public class TextSection extends Section {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TextSection that)) return false;
-        return Objects.equals(text, that.text);
+        if (o == null || getClass() != o.getClass()) return false;
+        TextSection that = (TextSection) o;
+        return text.equals(that.text);
     }
 
     @Override

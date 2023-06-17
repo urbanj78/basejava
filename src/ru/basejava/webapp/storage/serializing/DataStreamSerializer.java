@@ -3,6 +3,8 @@ package ru.basejava.webapp.storage.serializing;
 import ru.basejava.webapp.model.*;
 
 import java.io.*;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,14 +45,44 @@ public class DataStreamSerializer implements Serializing {
             for (int i = 0; i < size; i++) {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
             }
-            // TODO implements sections
+            resume.addSection(SectionType.PERSONAL, new TextSection(dis.readUTF()));
+            resume.addSection(SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
+            resume.addSection(SectionType.ACHIEVEMENT, new ListSection(listRead(dis)));
+            resume.addSection(SectionType.QUALIFICATIONS, new ListSection(listRead(dis)));
+            resume.addSection(SectionType.EDUCATION, new CompanySection(companyRead(dis)));
+            resume.addSection(SectionType.EXPERIENCE, new CompanySection(companyRead(dis)));
             return resume;
         }
+    }
+
+    private List<String> listRead(DataInputStream dis) throws IOException {
+        int listSize = dis.readInt();
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < listSize; i++) {
+            list.add(dis.readUTF());
+        }
+        return list;
+    }
+
+    private List<Company> companyRead(DataInputStream dis) throws IOException {
+        List<Company> companyList = new ArrayList<>();
+        int companyCount = dis.readInt();
+        for (int i = 0; i < companyCount; i++) {
+            Link url = new Link(dis.readUTF(), dis.readUTF());
+            int periodCount = dis.readInt();
+            List<Company.Period> periodList = new ArrayList<>();
+            for (int j = 0; j < periodCount; j++) {
+                periodList.add(new Company.Period(dis.readInt(), Month.of(dis.readInt()), dis.readUTF(), dis.readUTF()));
+            }
+            companyList.add(new Company(url, periodList));
+        }
+        return companyList;
     }
 
     private void listWrite(DataOutputStream dos, List<String> list) throws IOException {
         dos.writeInt(list.size());
         for (String text : list) {
+            dos.writeInt(text.length());
             dos.writeUTF(text);
         }
     }
@@ -60,6 +92,7 @@ public class DataStreamSerializer implements Serializing {
         for (Company com : section) {
             dos.writeUTF(com.getWebsite().getName());
             dos.writeUTF(com.getWebsite().getLink());
+            dos.writeInt(com.getPeriods().size());
             for (Company.Period period : com.getPeriods()) {
                 dos.writeInt(period.getStartDate().getYear());
                 dos.writeInt(period.getEndDate().getMonth().getValue());

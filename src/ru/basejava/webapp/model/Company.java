@@ -41,8 +41,10 @@ public class Company implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Company company)) return false;
-        return Objects.equals(website, company.website) && Objects.equals(periods, company.periods);
+        if (o == null || getClass() != o.getClass()) return false;
+        Company that = (Company) o;
+        return Objects.equals(website, that.website) &&
+                Objects.equals(periods, that.periods);
     }
 
     @Override
@@ -104,8 +106,12 @@ public class Company implements Serializable {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
-            if (!(o instanceof Period period)) return false;
-            return Objects.equals(dateStart, period.dateStart) && Objects.equals(dateEnd, period.dateEnd) && Objects.equals(title, period.title) && Objects.equals(description, period.description);
+            if (o == null || getClass() != o.getClass()) return false;
+            Period period = (Period) o;
+            return Objects.equals(dateStart, period.dateStart) &&
+                    Objects.equals(dateEnd, period.dateEnd) &&
+                    Objects.equals(title, period.title) &&
+                    Objects.equals(description, period.description);
         }
 
         @Override
