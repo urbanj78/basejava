@@ -22,15 +22,12 @@ public class DataStreamSerializer implements Serializing {
                 dos.writeUTF(entry.getValue());
             }
 
-            for (Map.Entry<SectionType, Section> entry : r.getSections().entrySet()) {
+            Map<SectionType, Section> sections = r.getSections();
+            dos.writeInt(sections.size());
+            for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
                 SectionType sectionType = entry.getKey();
                 Section section = entry.getValue();
-                dos.writeUTF(sectionType.name());
-                switch (sectionType) {
-                    case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) section).getText());
-                    case ACHIEVEMENT, QUALIFICATIONS -> listWrite(dos, ((ListSection) section).getList());
-                    case EDUCATION, EXPERIENCE -> companyWrite(dos, ((CompanySection) section).getCompanies());
-                }
+                sectionWrite(sectionType, section, dos);
             }
         }
     }
@@ -41,17 +38,40 @@ public class DataStreamSerializer implements Serializing {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
+            int contactsSize = dis.readInt();
+            for (int i = 0; i < contactsSize; i++) {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
             }
-            resume.addSection(SectionType.PERSONAL, new TextSection(dis.readUTF()));
-            resume.addSection(SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
-            resume.addSection(SectionType.ACHIEVEMENT, new ListSection(listRead(dis)));
-            resume.addSection(SectionType.QUALIFICATIONS, new ListSection(listRead(dis)));
-            resume.addSection(SectionType.EDUCATION, new CompanySection(companyRead(dis)));
-            resume.addSection(SectionType.EXPERIENCE, new CompanySection(companyRead(dis)));
+
+            int sectionsSize = dis.readInt();
+            for (int i = 0; i < sectionsSize; i++) {
+                SectionType sectionType = SectionType.valueOf(dis.readUTF());
+                resume.addSection(sectionType, sectionRead(sectionType, dis));
+            }
             return resume;
+        }
+    }
+
+    private void sectionWrite(SectionType sectionType, Section section, DataOutputStream dos) throws IOException {
+        switch (sectionType) {
+            case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) section).getText());
+            case ACHIEVEMENT, QUALIFICATIONS -> listWrite(dos, ((ListSection) section).getList());
+            case EDUCATION, EXPERIENCE -> companyWrite(dos, ((CompanySection) section).getCompanies());
+        }
+    }
+
+    private Section sectionRead(SectionType sectionType, DataInputStream dis) throws IOException {
+        switch (sectionType) {
+            case PERSONAL, OBJECTIVE -> {
+                return new TextSection(dis.readUTF());
+            }
+            case ACHIEVEMENT, QUALIFICATIONS -> {
+                return new ListSection(listRead(dis));
+            }
+            case EDUCATION, EXPERIENCE -> {
+                return new CompanySection(companyRead(dis));
+            }
+            default -> throw new IllegalStateException();
         }
     }
 
