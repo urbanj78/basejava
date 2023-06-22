@@ -111,13 +111,15 @@ public class DataStreamSerializer implements Serializing {
         dos.writeInt(section.size());
         for (Company com : section) {
             dos.writeUTF(com.getWebsite().getName());
-            dos.writeUTF(com.getWebsite().getLink());
+            String linkValue = com.getWebsite().getLink();
+            dos.writeUTF(linkValue == null ? "" : linkValue);
             dos.writeInt(com.getPeriods().size());
             for (Company.Period period : com.getPeriods()) {
                 dos.writeInt(period.getStartDate().getYear());
                 dos.writeInt(period.getEndDate().getMonth().getValue());
                 dos.writeUTF(period.getTitle());
-                dos.writeUTF(period.getDescription());
+                String descriptionValue = period.getDescription();
+                dos.writeUTF(descriptionValue == null ? "" : descriptionValue);
             }
         }
     }
