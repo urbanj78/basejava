@@ -56,7 +56,8 @@ public class DataStreamSerializer implements Serializing {
     private void sectionWrite(SectionType sectionType, Section section, DataOutputStream dos) throws IOException {
         switch (sectionType) {
             case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) section).getText());
-            case ACHIEVEMENT, QUALIFICATIONS -> listWrite(dos, ((ListSection) section).getList());
+            case ACHIEVEMENT, QUALIFICATIONS ->
+                    writeWithExeption(dos, ((ListSection) section).getList(), dos::writeUTF);
             case EDUCATION, EXPERIENCE -> companyWrite(dos, ((CompanySection) section).getCompanies());
         }
     }
@@ -100,21 +101,13 @@ public class DataStreamSerializer implements Serializing {
         return companyList;
     }
 
-    private void listWrite(DataOutputStream dos, List<String> list) throws IOException {
-        dos.writeInt(list.size());
-        for (String text : list) {
-            dos.writeInt(text.length());
-            dos.writeUTF(text);
-        }
-    }
-
     private void companyWrite(DataOutputStream dos, List<Company> section) throws IOException {
         writeWithExeption(dos, section, com -> {
             dos.writeUTF(com.getWebsite().getName());
             String linkValue = com.getWebsite().getLink();
             dos.writeUTF(linkValue == null ? "" : linkValue);
             dos.writeInt(com.getPeriods().size());
-            writeWithExeption (dos, com.getPeriods(), period -> {
+            writeWithExeption(dos, com.getPeriods(), period -> {
                 dos.writeInt(period.getStartDate().getYear());
                 dos.writeInt(period.getEndDate().getMonth().getValue());
                 dos.writeUTF(period.getTitle());
@@ -126,8 +119,8 @@ public class DataStreamSerializer implements Serializing {
 
     private <T> void writeWithExeption(DataOutputStream dos, Collection<T> collection, symbolWriter<T> writer) throws IOException {
         dos.writeInt(collection.size());
-        for (T item : collection) {
-            writer.write(item);
+        for (T element : collection) {
+            writer.write(element);
         }
     }
 
