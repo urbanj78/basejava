@@ -5,6 +5,7 @@ import ru.basejava.webapp.model.*;
 import java.io.*;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -108,19 +109,30 @@ public class DataStreamSerializer implements Serializing {
     }
 
     private void companyWrite(DataOutputStream dos, List<Company> section) throws IOException {
-        dos.writeInt(section.size());
-        for (Company com : section) {
+        writeWithExeption(dos, section, com -> {
             dos.writeUTF(com.getWebsite().getName());
             String linkValue = com.getWebsite().getLink();
             dos.writeUTF(linkValue == null ? "" : linkValue);
             dos.writeInt(com.getPeriods().size());
-            for (Company.Period period : com.getPeriods()) {
+            writeWithExeption (dos, com.getPeriods(), period -> {
                 dos.writeInt(period.getStartDate().getYear());
                 dos.writeInt(period.getEndDate().getMonth().getValue());
                 dos.writeUTF(period.getTitle());
                 String descriptionValue = period.getDescription();
                 dos.writeUTF(descriptionValue == null ? "" : descriptionValue);
-            }
+            });
+        });
+    }
+
+    private <T> void writeWithExeption(DataOutputStream dos, Collection<T> collection, symbolWriter<T> writer) throws IOException {
+        dos.writeInt(collection.size());
+        for (T item : collection) {
+            writer.write(item);
         }
+    }
+
+    @FunctionalInterface
+    private interface symbolWriter<T> {
+        void write(T t) throws IOException;
     }
 }
