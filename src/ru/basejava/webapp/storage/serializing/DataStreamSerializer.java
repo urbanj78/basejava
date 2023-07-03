@@ -18,18 +18,22 @@ public class DataStreamSerializer implements Serializing {
             dos.writeUTF(r.getFullName());
             Map<ContactType, String> contacts = r.getContacts();
             dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
-            }
+            writeWithException(dos, contacts.entrySet(), contact -> {
+                dos.writeUTF(contact.getKey().name());
+                dos.writeUTF(contact.getValue());
+            });
 
             Map<SectionType, Section> sections = r.getSections();
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-                SectionType sectionType = entry.getKey();
-                Section section = entry.getValue();
-                sectionWrite(sectionType, section, dos);
-            }
+            writeWithException(dos, sections.entrySet(), sect -> {
+                SectionType sectionType = sect.getKey();
+                Section section = sect.getValue();
+                switch (sectionType) {
+                    case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) section).getText());
+                    case ACHIEVEMENT, QUALIFICATIONS ->
+                            writeWithException(dos, ((ListSection) section).getList(), dos::writeUTF);
+                    case EDUCATION, EXPERIENCE -> companyWrite(dos, ((CompanySection) section).getCompanies());
+                }
+            });
         }
     }
 
@@ -50,15 +54,6 @@ public class DataStreamSerializer implements Serializing {
                 resume.addSection(sectionType, sectionRead(sectionType, dis));
             }
             return resume;
-        }
-    }
-
-    private void sectionWrite(SectionType sectionType, Section section, DataOutputStream dos) throws IOException {
-        switch (sectionType) {
-            case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) section).getText());
-            case ACHIEVEMENT, QUALIFICATIONS ->
-                    writeWithExeption(dos, ((ListSection) section).getList(), dos::writeUTF);
-            case EDUCATION, EXPERIENCE -> companyWrite(dos, ((CompanySection) section).getCompanies());
         }
     }
 
@@ -102,12 +97,12 @@ public class DataStreamSerializer implements Serializing {
     }
 
     private void companyWrite(DataOutputStream dos, List<Company> section) throws IOException {
-        writeWithExeption(dos, section, com -> {
+        writeWithException(dos, section, com -> {
             dos.writeUTF(com.getWebsite().getName());
             String linkValue = com.getWebsite().getLink();
             dos.writeUTF(linkValue == null ? "" : linkValue);
             dos.writeInt(com.getPeriods().size());
-            writeWithExeption(dos, com.getPeriods(), period -> {
+            writeWithException(dos, com.getPeriods(), period -> {
                 dos.writeInt(period.getStartDate().getYear());
                 dos.writeInt(period.getEndDate().getMonth().getValue());
                 dos.writeUTF(period.getTitle());
@@ -117,7 +112,7 @@ public class DataStreamSerializer implements Serializing {
         });
     }
 
-    private <T> void writeWithExeption(DataOutputStream dos, Collection<T> collection, symbolWriter<T> writer) throws IOException {
+    private <T> void writeWithException(DataOutputStream dos, Collection<T> collection, SymbolWriter<T> writer) throws IOException {
         dos.writeInt(collection.size());
         for (T element : collection) {
             writer.write(element);
@@ -125,7 +120,7 @@ public class DataStreamSerializer implements Serializing {
     }
 
     @FunctionalInterface
-    private interface symbolWriter<T> {
+    private interface SymbolWriter<T> {
         void write(T t) throws IOException;
     }
 }
