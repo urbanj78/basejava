@@ -27,6 +27,7 @@ public class DataStreamSerializer implements Serializing {
             writeWithException(dos, sections.entrySet(), sect -> {
                 SectionType sectionType = sect.getKey();
                 Section section = sect.getValue();
+                dos.writeUTF(sectionType.name());
                 switch (sectionType) {
                     case PERSONAL, OBJECTIVE -> dos.writeUTF(((TextSection) section).getText());
                     case ACHIEVEMENT, QUALIFICATIONS ->
