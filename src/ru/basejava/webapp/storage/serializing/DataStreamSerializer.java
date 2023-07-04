@@ -41,6 +41,7 @@ public class DataStreamSerializer implements Serializing {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
+            readWithException(dis, () -> resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
             int contactsSize = dis.readInt();
             for (int i = 0; i < contactsSize; i++) {
                 resume.addContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
@@ -95,11 +96,23 @@ public class DataStreamSerializer implements Serializing {
         return list;
     }
 
+    private void readWithException(DataInputStream dis, BlockAction action) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            action.action();
+        }
+    }
+
     private <T> void writeWithException(DataOutputStream dos, Collection<T> collection, SymbolWriter<T> writer) throws IOException {
         dos.writeInt(collection.size());
         for (T element : collection) {
             writer.write(element);
         }
+    }
+
+    @FunctionalInterface
+    private interface BlockAction {
+        void action() throws IOException;
     }
 
     @FunctionalInterface
