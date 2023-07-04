@@ -4,10 +4,7 @@ import ru.basejava.webapp.model.*;
 
 import java.io.*;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataStreamSerializer implements Serializing {
 
@@ -64,37 +61,13 @@ public class DataStreamSerializer implements Serializing {
                 return new TextSection(dis.readUTF());
             }
             case ACHIEVEMENT, QUALIFICATIONS -> {
-                return new ListSection(listRead(dis));
+                return new ListSection(listReadWithException(dis, dis::readUTF));
             }
             case EDUCATION, EXPERIENCE -> {
-                return new CompanySection(companyRead(dis));
+                return new CompanySection(listReadWithException(dis, () -> new Company(new Link(dis.readUTF(), dis.readUTF()), listReadWithException(dis, () -> new Company.Period(dis.readInt(), Month.of(dis.readInt()), dis.readUTF(), dis.readUTF())))));
             }
             default -> throw new IllegalStateException();
         }
-    }
-
-    private List<String> listRead(DataInputStream dis) throws IOException {
-        int listSize = dis.readInt();
-        List<String> list = new ArrayList<>();
-        for (int i = 0; i < listSize; i++) {
-            list.add(dis.readUTF());
-        }
-        return list;
-    }
-
-    private List<Company> companyRead(DataInputStream dis) throws IOException {
-        List<Company> companyList = new ArrayList<>();
-        int companyCount = dis.readInt();
-        for (int i = 0; i < companyCount; i++) {
-            Link url = new Link(dis.readUTF(), dis.readUTF());
-            int periodCount = dis.readInt();
-            List<Company.Period> periodList = new ArrayList<>();
-            for (int j = 0; j < periodCount; j++) {
-                periodList.add(new Company.Period(dis.readInt(), Month.of(dis.readInt()), dis.readUTF(), dis.readUTF()));
-            }
-            companyList.add(new Company(url, periodList));
-        }
-        return companyList;
     }
 
     private void companyWrite(DataOutputStream dos, List<Company> section) throws IOException {
@@ -113,11 +86,25 @@ public class DataStreamSerializer implements Serializing {
         });
     }
 
+    private <T> List<T> listReadWithException(DataInputStream dis, SymbolReader<T> reader) throws IOException {
+        int listSize = dis.readInt();
+        List<T> list = new ArrayList<>();
+        for (int i = 0; i < listSize; i++) {
+            list.add(reader.read());
+        }
+        return list;
+    }
+
     private <T> void writeWithException(DataOutputStream dos, Collection<T> collection, SymbolWriter<T> writer) throws IOException {
         dos.writeInt(collection.size());
         for (T element : collection) {
             writer.write(element);
         }
+    }
+
+    @FunctionalInterface
+    private interface SymbolReader<T> {
+        T read() throws IOException;
     }
 
     @FunctionalInterface
